@@ -32,7 +32,6 @@ import butterknife.ButterKnife;
 public class ListFragment extends Fragment {
 
     ArrayList<PokePlace> placeList;
-   LinearLayoutManager linearLayout;
 
 
     @BindView(R.id.listRecycler)

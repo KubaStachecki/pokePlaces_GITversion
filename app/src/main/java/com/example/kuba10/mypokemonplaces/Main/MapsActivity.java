@@ -54,6 +54,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.kuba10.mypokemonplaces.R.id.map;
+import static com.example.kuba10.mypokemonplaces.R.id.never;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, MapsContract.View, FragmentListener {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
@@ -99,7 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ButterKnife.bind(this);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
 
 
         if (checkPermissions())
@@ -112,22 +115,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         placeList = new ArrayList<>();
 
 
-
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 getLocation();
-                showSnackbar("" + latitude + "  " + longitude);
+
+                if (latitude != 0 && longitude != 0) {
+                    LatLng current = new LatLng(latitude, longitude);
+
+                    showSnackbar("" + latitude + "  " + longitude);
+
+                    openFragment(AddPlaceFragment.newInstance(current));
+                } else {
+                    showSnackbar(getString(R.string.unavaliable));
+                }
 
 
-
-
-//                AddPlaceFragment.newInstance().show(getSupportFragmentManager(), "");
             }
         });
 
-        fab2.setOnClickListener(new View.OnClickListener() {
+        fab2.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View view) {
 
@@ -163,11 +173,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        styleMap(googleMap);
 
         if (checkPermissions()) {
             mMap.setMyLocationEnabled(true);
+        } else {
+            showSnackbar(getString(R.string.unavaliable));
         }
+
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng position) {
+
+                openFragment(AddPlaceFragment.newInstance(position));
+
+
+            }
+        });
+    }
+
+    private void styleMap(GoogleMap googleMap) {
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.setBuildingsEnabled(true);
 
         try {
 
@@ -184,10 +214,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-
-
-
     public void placemarkers() {
 
         for (PokePlace place : placeList) {
@@ -200,6 +226,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(place.getLat(), place.getLong()))
                     .title(place.getTitle())
+                    .draggable(true)
 
             );
         }
@@ -215,7 +242,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null. <- well done google....
                             if (location != null) {
 
                                 LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
@@ -226,7 +252,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                             } else {
 
-                                showSnackbar("GPS problem");
+                                showSnackbar(getString(R.string.unavaliable));
 
                             }
                         }
@@ -277,8 +303,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void savePlace(PokePlace place) {
 
-        place.setLong(longitude);
-        place.setLat(latitude);
+//        place.setLong(longitude);
+//        place.setLat(latitude);
 
         Long id = date.getTime();
         placesRef.child(id.toString()).setValue(place);
@@ -291,7 +317,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
-                .add(R.id.container, fragment)
+                .add(R.id.coordinator, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -322,5 +348,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

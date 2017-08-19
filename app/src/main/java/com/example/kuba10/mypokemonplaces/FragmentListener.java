@@ -9,4 +9,6 @@ import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 public interface FragmentListener {
 
     void savePlace(PokePlace place);
+
+    void showSnackbar(String text);
 }

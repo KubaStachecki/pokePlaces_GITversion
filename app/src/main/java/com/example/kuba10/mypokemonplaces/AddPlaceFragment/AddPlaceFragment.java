@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,7 +23,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddPlaceFragment extends DialogFragment {
+public class AddPlaceFragment extends Fragment {
 
     @BindView(R.id.description_input)
     TextView descriptionField;
@@ -38,9 +40,14 @@ public class AddPlaceFragment extends DialogFragment {
 private FragmentListener fragmentListener;
 
 
-    public static AddPlaceFragment newInstance() {
+    public static AddPlaceFragment newInstance(LatLng position) {
+        AddPlaceFragment fragment = new AddPlaceFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("position", position);
+        fragment.setArguments(args);
+        return fragment;
 
-        return new AddPlaceFragment();
+
 
     }
 
@@ -64,16 +71,32 @@ private FragmentListener fragmentListener;
             @Override
             public void onClick(View view) {
 
+              LatLng  position = getArguments().getParcelable("position");
+                double lat = position.latitude;
+                double lng = position.longitude;
+
+
                 PokePlace place = new PokePlace();
-                place.setTitle(titleField.getText().toString());
-                place.setDesctription(descriptionField.getText().toString());
 
-                place.setTest1("test1");
-                place.setTest2("test2");
+                if (titleField.getText().toString().equals("")){
+                    fragmentListener.showSnackbar("Place must have a title");
+                }else {
 
-                fragmentListener.savePlace(place);
+                    place.setTitle(titleField.getText().toString());
+                    place.setTitle(titleField.getText().toString());
+                    place.setDesctription(descriptionField.getText().toString());
 
-                dismissDialog();
+                    place.setLong(lng);
+                    place.setLat(lat);
+
+                    place.setListPosition(2147483647);
+                    place.setTest2("test2");
+
+                    fragmentListener.savePlace(place);
+
+                }
+
+
 
 
             }
@@ -83,7 +106,7 @@ private FragmentListener fragmentListener;
             @Override
             public void onClick(View view) {
 
-                dismissDialog();
+
 
             }
         });
@@ -92,8 +115,6 @@ private FragmentListener fragmentListener;
         return view;
     }
 
-    private void dismissDialog(){
 
-        this.dismiss();
-    }
+
 }

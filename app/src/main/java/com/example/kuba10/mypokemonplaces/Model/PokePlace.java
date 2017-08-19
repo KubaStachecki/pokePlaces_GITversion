@@ -22,9 +22,9 @@ public class PokePlace implements Parcelable {
     @SerializedName("long")
     @Expose
     private Double lng;
-    @SerializedName("test1")
+    @SerializedName("listPosition")
     @Expose
-    private String test1;
+    private int listPosition;
     @SerializedName("test2")
     @Expose
     private String test2;
@@ -39,7 +39,7 @@ public class PokePlace implements Parcelable {
 
     protected PokePlace(Parcel in) {
         desctription = in.readString();
-        test1 = in.readString();
+        listPosition = in.readInt();
         test2 = in.readString();
         title = in.readString();
     }
@@ -80,12 +80,12 @@ public class PokePlace implements Parcelable {
         this.lng = _long;
     }
 
-    public String getTest1() {
-        return test1;
+    public int getListPosition() {
+        return listPosition;
     }
 
-    public void setTest1(String test1) {
-        this.test1 = test1;
+    public void setListPosition(int list_position) {
+        this.listPosition = listPosition;
     }
 
     public String getTest2() {
@@ -112,7 +112,7 @@ public class PokePlace implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(desctription);
-        parcel.writeString(test1);
+        parcel.writeInt(listPosition);
         parcel.writeString(test2);
         parcel.writeString(title);
     }
