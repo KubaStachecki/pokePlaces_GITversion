@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1017454672874",
+    "firebase_url": "https://mypokemonplaces.firebaseio.com",
+    "project_id": "mypokemonplaces",
+    "storage_bucket": "mypokemonplaces.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017454672874:android:e654827617f01409",
+        "android_client_info": {
+          "package_name": "com.example.kuba10.mypokemonplaces"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1017454672874-4ulh6thvveb61u9s42fcjhptgc0oi0ns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kuba10.mypokemonplaces",
+            "certificate_hash": "defca02b75c5dfa15768ee7fddd2ec4606f5636d"
+          }
+        },
+        {
+          "client_id": "1017454672874-vekp8ks24vjpadlf7m7drgbcqh35jqnu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL-hts3_t9AvyujPeaIzPQuyITuy2C92Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1017454672874-vekp8ks24vjpadlf7m7drgbcqh35jqnu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
