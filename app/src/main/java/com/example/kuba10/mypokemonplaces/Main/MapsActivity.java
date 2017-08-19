@@ -3,6 +3,7 @@ package com.example.kuba10.mypokemonplaces.Main;
 import android.Manifest;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -39,6 +40,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
@@ -54,6 +56,7 @@ import butterknife.ButterKnife;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, MapsContract.View, FragmentListener {
 
+    private static final String TAG = MapsActivity.class.getSimpleName();
     private GoogleMap mMap;
     private static final int REQUEST_GPS_PERMISSION = 786;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -95,7 +98,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ButterKnife.bind(this);
 
-         mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
 
@@ -110,13 +113,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getLocation();
                 showSnackbar("" + latitude + "  " + longitude);
 
-                AddPlaceFragment.newInstance().show(getSupportFragmentManager(), "");
+
+
+
+//                AddPlaceFragment.newInstance().show(getSupportFragmentManager(), "");
             }
         });
 
@@ -131,7 +138,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-
     }
 
     private void initView() {
@@ -141,11 +147,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        getLocation();
-
         setupDatabase();
         getPlacesList();
-
+        getLocation();
     }
 
     private void setupDatabase() {
@@ -165,10 +169,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
+        try {
 
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.style1));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
     }
 
 
+
+
+
+
+    public void placemarkers() {
+
+        for (PokePlace place : placeList) {
+
+            Log.d("LISTA FIREBASE", "   " + place.getTitle());
+            Log.d("LISTA FIREBASE", "   " + place.getLat());
+            Log.d("LISTA FIREBASE", "   " + place.getLong());
+
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(place.getLat(), place.getLong()))
+                    .title(place.getTitle())
+
+            );
+        }
+
+
+    }
 
 
     public void getLocation() {
@@ -186,6 +223,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 17));
+
                             } else {
 
                                 showSnackbar("GPS problem");
@@ -193,7 +231,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         }
                     });
-
 
 
         }
@@ -221,12 +258,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Log.d("LISTA FIREBASE", "   " + placeList.size());
 //                showSnackbar("LISTA FIREBASE + " + placeList.size() );
+
+                placemarkers();
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 //                showSnackbar("Error - check internet connection") ;
-                Log.d("LISTA FIREBASE", "nie zadzialala   ");
+                Log.d("LISTA FIREBASE", "database connection error");
 
                 showSnackbar("Database error - check connection");
 
