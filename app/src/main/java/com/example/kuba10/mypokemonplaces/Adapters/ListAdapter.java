@@ -47,7 +47,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
         viewHolder.title.setText(placeList.get(i).getTitle());
         viewHolder.description.setText(placeList.get(i).getDesctription());
 
-        viewHolder.image.setImageResource(R.drawable.ic_android_black_24dp);
+        viewHolder.image.setImageResource(R.drawable.ic_034_pikachu_1);
 
 
 //

@@ -22,7 +22,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="20dp"
             android:padding="8dp"
-            card_view:srcCompat="@drawable/common_google_signin_btn_icon_dark_focused" />
+            card_view:srcCompat="@drawable/ic_034_pikachu_1" />
 
 
         <TextView
