@@ -7,11 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kuba10.mypokemonplaces.Adapters.ListAdapter;
+import com.example.kuba10.mypokemonplaces.Adapters.OnStartDragListener;
+import com.example.kuba10.mypokemonplaces.Adapters.SimpleItemTouchHelperCallback;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.R;
 
@@ -21,17 +24,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ListFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ListFragment extends Fragment {
+
+public class ListFragment extends Fragment implements OnStartDragListener {
 
     ArrayList<PokePlace> placeList;
+    private ItemTouchHelper mItemTouchHelper;
 
 
     @BindView(R.id.listRecycler)
@@ -61,15 +58,29 @@ public class ListFragment extends Fragment {
         ButterKnife.bind(this,view);
 
         recyclerView.setHasFixedSize(true);
+       ListAdapter adapter =  new ListAdapter(placeList);
 
         RecyclerView.LayoutManager linearLayout = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayout);
-        recyclerView.setAdapter(new ListAdapter(placeList));
+        recyclerView.setAdapter(adapter);
+
+
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(recyclerView);
+
+
+
+
 
         return view;
     }
 
-
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -80,6 +91,16 @@ public class ListFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+
+
+
+    public interface ItemTouchHelperAdapter {
+
+        void onItemMove(int fromPosition, int toPosition);
+
+        void onItemDismiss(int position);
     }
 
 
