@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
+import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.ListFragment.ListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.R;
@@ -52,6 +53,7 @@ import static com.example.kuba10.mypokemonplaces.R.id.map;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, MapsContract.View, FragmentListener {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
+    public static final String PLACES = "places";
     private GoogleMap mMap;
     private static final int REQUEST_GPS_PERMISSION = 786;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -66,7 +68,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<PokePlace> placeList;
 
     FirebaseDatabase fDatabase;
-    DatabaseReference databaseReference;
     DatabaseReference placesRef;
     Date date;
 
@@ -133,7 +134,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
 
-                openFragment(ListFragment.newInstance(placeList));
+                openFragment(FirebaseListFragment.newInstance());
+
+                showSnackbar("klkles");
 
 
             }
@@ -156,8 +159,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void setupDatabase() {
         fDatabase = FirebaseDatabase.getInstance();
-        databaseReference = fDatabase.getReference();
-        placesRef = databaseReference.child("places");
+        placesRef = fDatabase.getReference().child(PLACES);
         date = new Date();
     }
 
@@ -273,7 +275,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void getPlacesList() {
 
 
-        databaseReference.child("places").addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+        placesRef.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
 
             @Override
             public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
