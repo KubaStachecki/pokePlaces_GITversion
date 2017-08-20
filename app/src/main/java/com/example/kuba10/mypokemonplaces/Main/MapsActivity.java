@@ -32,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -241,7 +242,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 17));
+
+                                CameraPosition cameraPosition = new CameraPosition.Builder()
+                                        .target(current)      // Sets the center of the map to Mountain View
+                                        .zoom(18)                   // Sets the zoom
+                                        .bearing(0)                // Sets the orientation of the camera to east
+                                        .tilt(80)                   // Sets the tilt of the camera to 30 degrees
+                                        .build();                   // Creates a CameraPosition from the builder
+                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                             } else {
 
