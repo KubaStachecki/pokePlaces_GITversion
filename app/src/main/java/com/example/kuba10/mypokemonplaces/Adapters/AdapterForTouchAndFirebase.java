@@ -47,40 +47,25 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         mOnStartDragListener = onStartDragListener;
         this.context = context;
         places = new ArrayList<>();
-
-
+        
         mChildEventListener = mRef.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 places.add(dataSnapshot.getValue(PokePlace.class));
-
                 Log.d("CHILD ADD LIST SIZE : ", "" + places.size());
-
             }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-
-
             }
-
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -138,8 +123,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     private void setIndexInFirebase() {
 
-        Log.d("INDEX LIST SIZE : ", "" + places.size());
-
+//        Log.d("INDEX LIST SIZE : ", "" + places.size());
 
         if (places.size() != 0) {
 
