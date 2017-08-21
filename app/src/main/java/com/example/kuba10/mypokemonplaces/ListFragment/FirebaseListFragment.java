@@ -39,6 +39,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     @BindView(R.id.listRecycler)
     RecyclerView recyclerView;
+
     private Query orderByChild;
 
 
@@ -61,7 +62,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
         //  Use if un-sorted list is required, and change "query" in mFirebaseAdapter
 //        prepareDatabaseInstance();
-
+        prepareDatabaseInstance();
         prepareQuery();
         setUpFirebaseAdapter();
 
@@ -77,7 +78,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
         mFirebaseAdapter = new AdapterForTouchAndFirebase(PokePlace.class,
                 R.layout.place_card_layout, CardViewHolder.class,
-                orderByChild, this, context);
+                orderByChild, this, context, databaseReference);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -110,6 +111,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     }
 
 
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -120,9 +122,9 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     @Override
     public void onPause() {
-        mFirebaseAdapter.cleanup();
 
         super.onPause();
+        mFirebaseAdapter.cleanup();
 
 
     }

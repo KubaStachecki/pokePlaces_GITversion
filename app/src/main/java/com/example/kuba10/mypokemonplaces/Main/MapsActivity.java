@@ -39,6 +39,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -59,6 +61,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double latitude;
     private double longitude;
     SupportMapFragment mapFragment;
+
+    private ChildEventListener mChildEventListener;
 
     private MapsContract.Presenter mainPresenter;
     FragmentManager fragmentManager;
@@ -153,6 +157,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void setupDatabase() {
+
         fDatabase = FirebaseDatabase.getInstance();
         placesRef = fDatabase.getReference().child(Constants.PLACES);
     }
@@ -205,6 +210,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void placemarkers() {
 
+        mMap.clear();
         for (PokePlace place : placeList) {
 
 //            Log.d("LISTA FIREBASE", "   " + place.getTitle());
@@ -269,6 +275,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void getPlacesList() {
 
 
+//        mChildEventListener = placesRef.addChildEventListener(new ChildEventListener() {
+//
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                placeList.add(dataSnapshot.getValue(PokePlace.class));
+//                Log.d("MAIN LIST : ", "" + placeList.size());
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//                placemarkers();
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                placemarkers();
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//                placemarkers();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//            }
+//        });
+
+
         placesRef.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
 
             @Override
@@ -284,6 +320,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 placemarkers();
 
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

@@ -18,7 +18,7 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     private TextView title, description;
     public ImageView image;
-    private CardView placeCardView;
+    public CardView placeCardView;
 
     View view;
     Context mContext;

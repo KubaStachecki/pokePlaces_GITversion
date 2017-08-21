@@ -39,15 +39,15 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     public AdapterForTouchAndFirebase(Class<PokePlace> modelClass, int modelLayout,
                                       Class<CardViewHolder> viewHolderClass,
-                                      Query ref, OnStartDragListener onStartDragListener, Context context) {
+                                      Query ref, OnStartDragListener onStartDragListener, Context context, DatabaseReference datRef) {
 
 
         super(modelClass, modelLayout, viewHolderClass, ref);
-        mRef = ref.getRef();
+        mRef = datRef;
         mOnStartDragListener = onStartDragListener;
         this.context = context;
         places = new ArrayList<>();
-        
+
         mChildEventListener = mRef.addChildEventListener(new ChildEventListener() {
 
             @Override
@@ -55,15 +55,19 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
                 places.add(dataSnapshot.getValue(PokePlace.class));
                 Log.d("CHILD ADD LIST SIZE : ", "" + places.size());
             }
+
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
+
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
+
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -72,14 +76,17 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     }
 
+
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
 
         Collections.swap(places, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
 
+
         return false;
     }
+
 
     @Override
     public void onItemDismiss(int position) {
@@ -94,12 +101,19 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
         viewHolder.bindPokePlace(place);
 
+
         viewHolder.image.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                     mOnStartDragListener.onStartDrag(viewHolder);
+                } else if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_UP)
+                {
+                    setIndexInFirebase();
+                    Log.d("touh", "onTouch: up - setindex");
+
                 }
+
                 return false;
             }
         });
@@ -114,24 +128,23 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     @Override
     public void cleanup() {
-        setIndexInFirebase();
-        mRef.removeEventListener(mChildEventListener);
-
         super.cleanup();
+        mRef.removeEventListener(mChildEventListener);
     }
 
 
     private void setIndexInFirebase() {
 
-//        Log.d("INDEX LIST SIZE : ", "" + places.size());
+        Log.d("touh", "setindex - !!!!");
 
         if (places.size() != 0) {
+            for (PokePlace place : places) {
+                int index = places.indexOf(place);
+                Log.d("KEY : ", "" + getRef(index).getKey().toString());
+                DatabaseReference ref = getRef(index);
+                place.setListPosition(Integer.toString(index));
+                ref.setValue(place);
 
-        for (PokePlace place : places) {
-            int index = places.indexOf(place);
-            DatabaseReference ref = getRef(index);
-            place.setListPosition(Integer.toString(index));
-            ref.setValue(place);
             }
 
         }
