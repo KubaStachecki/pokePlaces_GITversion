@@ -37,7 +37,7 @@ public class AddPlaceFragment extends Fragment {
     @BindView(R.id.cancel_button)
     Button cancelButt;
 
-private FragmentListener fragmentListener;
+    private FragmentListener fragmentListener;
 
 
     public static AddPlaceFragment newInstance(LatLng position) {
@@ -46,7 +46,6 @@ private FragmentListener fragmentListener;
         args.putParcelable("position", position);
         fragment.setArguments(args);
         return fragment;
-
 
 
     }
@@ -71,7 +70,7 @@ private FragmentListener fragmentListener;
             @Override
             public void onClick(View view) {
 
-              LatLng  position = getArguments().getParcelable("position");
+                LatLng position = getArguments().getParcelable("position");
                 double lat = position.latitude;
                 double lng = position.longitude;
 
@@ -89,31 +88,39 @@ private FragmentListener fragmentListener;
                     place.setLong(lng);
                     place.setLat(lat);
 
-                    place.setListPosition(2147483647);
+                    place.setListPosition("list_index_not_set");
                     place.setTest2("test2");
-
-                    fragmentListener.savePlace(place);
 
                 }
 
 
+//                fragmentListener.savePlace(
+//                        new PokePlace(descriptionField.getText().toString(), lat, lng, 2147483647, "test2", titleField.getText().toString()));
+
+
+                    fragmentListener.savePlace(place);
+
+                place = null;
+
+
 
 
             }
-        });
+    });
 
-        cancelButt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        cancelButt.setOnClickListener(new View.OnClickListener()
+
+    {
+        @Override
+        public void onClick (View view){
 
 
-
-            }
-        });
+    }
+    });
 
 
         return view;
-    }
+}
 
 
 

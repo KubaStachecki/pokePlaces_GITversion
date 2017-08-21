@@ -25,6 +25,7 @@ import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.ListFragment.ListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
+import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -53,9 +54,7 @@ import static com.example.kuba10.mypokemonplaces.R.id.map;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, MapsContract.View, FragmentListener {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
-    public static final String PLACES = "places";
     private GoogleMap mMap;
-    private static final int REQUEST_GPS_PERMISSION = 786;
     private FusedLocationProviderClient mFusedLocationClient;
     private double latitude;
     private double longitude;
@@ -69,7 +68,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     FirebaseDatabase fDatabase;
     DatabaseReference placesRef;
-    Date date;
 
 
     @BindView(R.id.coordinator)
@@ -136,9 +134,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 openFragment(FirebaseListFragment.newInstance());
 
-                showSnackbar("klkles");
-
-
             }
         });
 
@@ -159,8 +154,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void setupDatabase() {
         fDatabase = FirebaseDatabase.getInstance();
-        placesRef = fDatabase.getReference().child(PLACES);
-        date = new Date();
+        placesRef = fDatabase.getReference().child(Constants.PLACES);
     }
 
 
@@ -201,6 +195,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             if (!success) {
                 Log.e(TAG, "Style parsing failed.");
+                showSnackbar("map style not loaded");
             }
         } catch (Resources.NotFoundException e) {
             Log.e(TAG, "Can't find style. Error: ", e);
@@ -212,17 +207,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         for (PokePlace place : placeList) {
 
-            Log.d("LISTA FIREBASE", "   " + place.getTitle());
-            Log.d("LISTA FIREBASE", "   " + place.getLat());
-            Log.d("LISTA FIREBASE", "   " + place.getLong());
+//            Log.d("LISTA FIREBASE", "   " + place.getTitle());
+//            Log.d("LISTA FIREBASE", "   " + place.getLat());
+//            Log.d("LISTA FIREBASE", "   " + place.getLong());
 
 
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(place.getLat(), place.getLong()))
                     .title(place.getTitle())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_mid)
-));
-
+                    ));
 
 
         }
@@ -285,8 +279,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     placeList.add(pokePlace);
                 }
 
-                Log.d("LISTA FIREBASE", "   " + placeList.size());
-//                showSnackbar("LISTA FIREBASE + " + placeList.size() );
+                Log.d("-----LISTA FIREBASE", "   " + placeList.size());
 
                 placemarkers();
 
@@ -294,10 +287,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-//                showSnackbar("Error - check internet connection") ;
+                showSnackbar("Error - check internet connection");
                 Log.d("LISTA FIREBASE", "database connection error");
 
-                showSnackbar("Database error - check connection");
+                showSnackbar(getString(R.string.dataError));
 
             }
         });
@@ -308,9 +301,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //        place.setLong(longitude);
 //        place.setLat(latitude);
+        Date date = new Date();
 
         Long id = date.getTime();
-        placesRef.child(id.toString()).setValue(place);
+
+        placesRef.child(id.toString()).setValue(place, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    showSnackbar("Error while saving :(");
+
+
+                } else {
+                    showSnackbar("Place saved successfully.");
+                }
+            }
+
+
+        });
+
+
+        date = null;
+        id = null;
 
 
     }
@@ -347,7 +359,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void requestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_GPS_PERMISSION);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_GPS_PERMISSION);
         }
     }
 

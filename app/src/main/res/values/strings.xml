@@ -7,4 +7,5 @@
     <string name="sample_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus egestas ante eleifend, efficitur lectus at, euismod enim. </string>
     <string name="sample_title">Lorem ipsum dolor sit amet</string>
     <string name="unavaliable">Current position unavailable</string>
+    <string name="dataError">Database error - check connection</string>
 </resources>

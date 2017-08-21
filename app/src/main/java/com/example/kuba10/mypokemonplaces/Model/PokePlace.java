@@ -24,7 +24,7 @@ public class PokePlace implements Parcelable {
     private Double lng;
     @SerializedName("listPosition")
     @Expose
-    private int listPosition;
+    private String listPosition;
     @SerializedName("test2")
     @Expose
     private String test2;
@@ -34,12 +34,20 @@ public class PokePlace implements Parcelable {
 
     public PokePlace (){
 
+    }
 
+    public PokePlace(String desctription, Double lat, Double lng, String listPosition, String test2, String title) {
+        this.desctription = desctription;
+        this.lat = lat;
+        this.lng = lng;
+        this.listPosition = listPosition;
+        this.test2 = test2;
+        this.title = title;
     }
 
     protected PokePlace(Parcel in) {
         desctription = in.readString();
-        listPosition = in.readInt();
+        listPosition = in.readString();
         test2 = in.readString();
         title = in.readString();
     }
@@ -76,15 +84,15 @@ public class PokePlace implements Parcelable {
         return lng;
     }
 
-    public void setLong(Double _long) {
-        this.lng = _long;
+    public void setLong(Double lng) {
+        this.lng = lng;
     }
 
-    public int getListPosition() {
+    public String getListPosition() {
         return listPosition;
     }
 
-    public void setListPosition(int list_position) {
+    public void setListPosition(String listPosition) {
         this.listPosition = listPosition;
     }
 
@@ -112,7 +120,7 @@ public class PokePlace implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(desctription);
-        parcel.writeInt(listPosition);
+        parcel.writeString(listPosition);
         parcel.writeString(test2);
         parcel.writeString(title);
     }
