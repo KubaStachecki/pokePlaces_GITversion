@@ -80,9 +80,13 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
 
+
+
         Collections.swap(places, fromPosition, toPosition);
+
         notifyItemMoved(fromPosition, toPosition);
 
+        setIndexInFirebase();
 
         return false;
     }
@@ -129,6 +133,8 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
     @Override
     public void cleanup() {
         super.cleanup();
+//        setIndexInFirebase();
+
         mRef.removeEventListener(mChildEventListener);
     }
 

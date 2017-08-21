@@ -77,8 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinatorLayout;
 
-    @BindView(R.id.container)
-    FrameLayout container;
+
 
     @BindView(R.id.fab)
     FloatingActionButton fab;

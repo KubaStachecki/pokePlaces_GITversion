@@ -7,10 +7,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.kuba10.mypokemonplaces.Main.MapsActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/container">
+
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -52,6 +49,5 @@
         android:layout_margin="@dimen/fab_margin"
          />
 
-    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
