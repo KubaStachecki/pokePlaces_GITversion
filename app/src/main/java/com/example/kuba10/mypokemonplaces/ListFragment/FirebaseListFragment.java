@@ -16,6 +16,7 @@ import com.example.kuba10.mypokemonplaces.Adapters.CardViewHolder;
 import com.example.kuba10.mypokemonplaces.Adapters.OnStartDragListener;
 import com.example.kuba10.mypokemonplaces.Adapters.SimpleItemTouchHelperCallback;
 import com.example.kuba10.mypokemonplaces.Constants;
+import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.R;
 import com.google.firebase.database.DatabaseReference;
@@ -30,11 +31,13 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     private static final String TAG = FirebaseListFragment.class.getSimpleName();
 
-    private DatabaseReference databaseReference;
+    DatabaseReference databaseReference;
     private AdapterForTouchAndFirebase mFirebaseAdapter;
     private ItemTouchHelper mItemTouchHelper;
 
     Context context;
+    private FragmentListener fragmentListener;
+
 
 
     @BindView(R.id.listRecycler)
@@ -51,6 +54,8 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+        fragmentListener = (FragmentListener) context;
+
     }
 
     @Override
@@ -62,7 +67,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
         //  Use if un-sorted list is required, and change "query" in mFirebaseAdapter
 //        prepareDatabaseInstance();
-        prepareDatabaseInstance();
+
         prepareQuery();
         setUpFirebaseAdapter();
 
@@ -78,7 +83,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
         mFirebaseAdapter = new AdapterForTouchAndFirebase(PokePlace.class,
                 R.layout.place_card_layout, CardViewHolder.class,
-                orderByChild, this, context, databaseReference);
+                orderByChild, this, this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -111,7 +116,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     }
 
 
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -124,7 +128,28 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     public void onPause() {
 
         super.onPause();
-        mFirebaseAdapter.cleanup();
+
+
+    }
+
+    public void cleanup() {
+
+//    mFirebaseAdapter.cleanup();
+
+    }
+
+    public void dismiss() {
+
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
+
+                .remove(this).commit();
+    }
+
+    public void findPosition(PokePlace place){
+
+        fragmentListener.findPlaceFromList(place);
 
 
     }

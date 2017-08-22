@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     private TextView title, description;
     public ImageView image;
     public CardView placeCardView;
+    public ImageButton favouriteBtn;
 
     View view;
     Context mContext;
@@ -40,6 +42,7 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         title = (TextView) view.findViewById(R.id.title_text);
         description = (TextView) view.findViewById(R.id.description_text);
         image = (ImageView) view.findViewById(R.id.card_image);
+        favouriteBtn = (ImageButton) view.findViewById(R.id.favourite_button);
         placeCardView = (CardView) view.findViewById(R.id.placeCardView);
 
         title.setText(place.getTitle());

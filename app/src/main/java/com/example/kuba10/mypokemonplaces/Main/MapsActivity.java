@@ -16,9 +16,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
@@ -60,27 +62,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationClient;
     private double latitude;
     private double longitude;
-    SupportMapFragment mapFragment;
+    private SupportMapFragment mapFragment;
 
-    private ChildEventListener mChildEventListener;
 
     private MapsContract.Presenter mainPresenter;
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
 
 
     private ArrayList<PokePlace> placeList;
 
-    FirebaseDatabase fDatabase;
-    DatabaseReference placesRef;
+    private FirebaseDatabase fDatabase;
+    private DatabaseReference placesRef;
 
 
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinatorLayout;
 
-
-
     @BindView(R.id.fab)
     FloatingActionButton fab;
+
+    @BindView(R.id.sad_pikatchu)
+    ImageView sadPikatchu;
 
     @BindView(R.id.fab2)
     FloatingActionButton fab2;
@@ -98,15 +100,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(map);
 
-
-        if (checkPermissions())
-            initView();
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mainPresenter = new MapsPresenter(this);
 
         fragmentManager = this.getSupportFragmentManager();
         placeList = new ArrayList<>();
+
+
+        if(checkPermissions()){
+
+            initView();
+
+        }else{
+
+            requestPermission();}
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -118,9 +125,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (latitude != 0 && longitude != 0) {
                     LatLng current = new LatLng(latitude, longitude);
 
-                    showSnackbar("" + latitude + "  " + longitude);
-
                     openFragment(AddPlaceFragment.newInstance(current));
+
+
+//                    if( fragmentManager.getBackStackEntryCount() < 1) {
+//
+//                    }
+
                 } else {
                     showSnackbar(getString(R.string.unavaliable));
                 }
@@ -137,6 +148,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 openFragment(FirebaseListFragment.newInstance());
 
+//              if( fragmentManager.getBackStackEntryCount() < 1) {
+//
+//                 }
+
             }
         });
 
@@ -145,14 +160,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void initView() {
         mapFragment.getMapAsync(this);
+
+        if (checkPermissions()) {
+        setupDatabase();
+        getPlacesList();
+        getLocation();}
+
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        setupDatabase();
-        getPlacesList();
-        getLocation();
+
+
+
     }
 
     private void setupDatabase() {
@@ -245,11 +266,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 longitude = location.getLongitude();
 
                                 CameraPosition cameraPosition = new CameraPosition.Builder()
-                                        .target(current)      // Sets the center of the map to Mountain View
-                                        .zoom(18)                   // Sets the zoom
-                                        .bearing(0)                // Sets the orientation of the camera to east
-                                        .tilt(80)                   // Sets the tilt of the camera to 30 degrees
-                                        .build();                   // Creates a CameraPosition from the builder
+                                        .target(current)
+                                        .zoom(18)
+                                        .bearing(0)
+                                        .tilt(80)
+                                        .build();
                                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                             } else {
@@ -269,6 +290,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Snackbar.make(coordinatorLayout, text, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
+
 
 
     public void getPlacesList() {
@@ -371,25 +393,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .add(R.id.coordinator, fragment)
                 .addToBackStack(null)
                 .commit();
+
     }
 
     private boolean checkPermissions() {
+
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-
-            requestPermission();
-
             return false;
+
+        }else {
+
+            return true;
         }
-        return true;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            initView();
+
+            mapFragment.getView().setVisibility(View.VISIBLE);
+            sadPikatchu.setVisibility(View.INVISIBLE);
+
+        }else{
+
+            mapFragment.getView().setVisibility(View.INVISIBLE);
+            sadPikatchu.setVisibility(View.VISIBLE);
+            showSnackbar("App will not work without GPS");
+
+
+
+
+        }
 
     }
 
@@ -401,6 +443,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onBackPressed() {
+
         super.onBackPressed();
+
+//        Log.d("TAAAG", "nacisneto back");
+//        FirebaseListFragment listFragment = (FirebaseListFragment) fragmentManager.findFragmentById(R.id.coordinator);
+//        listFragment.cleanup();
+
+
     }
+
+
+    public void findPlaceFromList(PokePlace place){
+
+        Double lat = place.getLat();
+        Double lng = place.getLong();
+
+        LatLng selectedPlace = new LatLng(lat, lng);
+
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(selectedPlace)
+                .zoom(18)
+                .bearing(0)
+                .tilt(80)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+
+    }
+
+
+
 }

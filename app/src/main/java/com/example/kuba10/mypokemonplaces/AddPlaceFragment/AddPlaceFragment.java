@@ -61,7 +61,6 @@ public class AddPlaceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_place, container, false);
 
         ButterKnife.bind(this, view);
@@ -89,7 +88,7 @@ public class AddPlaceFragment extends Fragment {
                     place.setLat(lat);
 
                     place.setListPosition("list_index_not_set");
-                    place.setTest2("test2");
+                    place.setFavourite(0);
 
                 }
 
@@ -102,6 +101,7 @@ public class AddPlaceFragment extends Fragment {
 
                 place = null;
 
+                dismiss();
 
 
 
@@ -114,6 +114,7 @@ public class AddPlaceFragment extends Fragment {
         @Override
         public void onClick (View view){
 
+            dismiss();
 
     }
     });
@@ -122,6 +123,13 @@ public class AddPlaceFragment extends Fragment {
         return view;
 }
 
+public void dismiss(){
+
+    getActivity().getSupportFragmentManager()
+            .beginTransaction()
+            .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
+            .remove(this).commit();
+}
 
 
 }

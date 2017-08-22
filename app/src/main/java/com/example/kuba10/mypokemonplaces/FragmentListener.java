@@ -11,4 +11,7 @@ public interface FragmentListener {
     void savePlace(PokePlace place);
 
     void showSnackbar(String text);
+
+    void findPlaceFromList(PokePlace place);
+
 }
