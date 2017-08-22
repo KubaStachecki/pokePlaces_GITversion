@@ -29,6 +29,7 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:tooltipText="Current Position"
 
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
@@ -38,6 +39,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab2"
+        android:tooltipText="Poke Places List"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
@@ -52,7 +54,7 @@
         android:layout_height="match_parent"
         android:layout_margin="80dp"
         android:layout_gravity="center"
-        app:srcCompat="@drawable/sad_pika" />
+        android:src="@drawable/sad_pika" />
 
 
 </android.support.design.widget.CoordinatorLayout>
