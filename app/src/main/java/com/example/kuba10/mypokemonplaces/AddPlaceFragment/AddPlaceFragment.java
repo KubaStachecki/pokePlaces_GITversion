@@ -18,6 +18,8 @@ import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.R;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -91,6 +93,12 @@ public class AddPlaceFragment extends Fragment {
                     place.setListPosition("list_index_not_set");
                     place.setFavourite(0);
                     place.setPokemonId(-777);
+
+                    Date date = new Date();
+                    Long id = date.getTime();
+
+                    place.setGlobalID(id);
+
                 }
 
                 fragmentListener.savePlace(place);

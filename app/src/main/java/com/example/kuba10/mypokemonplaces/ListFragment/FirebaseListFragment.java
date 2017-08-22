@@ -39,7 +39,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     private FragmentListener fragmentListener;
 
 
-
     @BindView(R.id.listRecycler)
     RecyclerView recyclerView;
 
@@ -128,13 +127,14 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     public void onPause() {
 
         super.onPause();
+        cleanup();
 
 
     }
 
     public void cleanup() {
 
-//    mFirebaseAdapter.cleanup();
+        mFirebaseAdapter.cleanup();
 
     }
 
@@ -147,7 +147,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
                 .remove(this).commit();
     }
 
-    public void findPosition(PokePlace place){
+    public void findPosition(PokePlace place) {
 
         fragmentListener.findPlaceFromList(place);
 

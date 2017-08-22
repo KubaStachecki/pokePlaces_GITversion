@@ -36,6 +36,17 @@ public class PokePlace implements Parcelable {
     @Expose
     private int pokemonId;
 
+    @SerializedName("globalID")
+    @Expose
+    private long globalID;
+
+    public long getGlobalID() {
+        return globalID;
+    }
+
+    public void setGlobalID(long globalID) {
+        this.globalID = globalID;
+    }
 
     public PokePlace (){
 

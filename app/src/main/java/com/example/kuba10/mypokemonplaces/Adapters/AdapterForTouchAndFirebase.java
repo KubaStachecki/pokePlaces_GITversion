@@ -1,17 +1,9 @@
 package com.example.kuba10.mypokemonplaces.Adapters;
 
-import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.MotionEventCompat;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
@@ -34,7 +26,7 @@ import java.util.Collections;
 
 public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlace, CardViewHolder> implements ItemTouchHelperAdapter {
 
-    private DatabaseReference mRef;
+    private DatabaseReference placesReference;
     private ChildEventListener mChildEventListener;
     private ArrayList<PokePlace> places;
     private FirebaseListFragment parentFragment;
@@ -50,9 +42,9 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         places = new ArrayList<>();
         parentFragment = fragment;
 
-        mRef = FirebaseDatabase.getInstance().getReference().child(Constants.PLACES);
+        placesReference = FirebaseDatabase.getInstance().getReference().child(Constants.PLACES);
 
-        mChildEventListener = mRef.addChildEventListener(new ChildEventListener() {
+        mChildEventListener = placesReference.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -86,7 +78,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
         Collections.swap(places, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-        setIndexInFirebase();
+//        setIndexInFirebase();
 
         return false;
     }
@@ -127,18 +119,16 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
                         break;
 
 
-
                 }
 
 
-            } });
+            }
+        });
 
 
-
-
-                viewHolder.image.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch (View v, MotionEvent event){
+        viewHolder.image.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                     mOnStartDragListener.onStartDrag(viewHolder);
                 } else if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_UP) {
@@ -148,38 +138,38 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
                 return false;
             }
-            });
+        });
 
 
         viewHolder.placeCardView.setOnClickListener(new View.OnClickListener()
 
-            {
-                @Override
-                public void onClick (View view){
+        {
+            @Override
+            public void onClick(View view) {
 
                 parentFragment.dismiss();
                 parentFragment.findPosition(place);
 
 
             }
-            });
+        });
 
 
-        }
+    }
 
-        @Override
-        public int getItemCount () {
-            return super.getItemCount();
-        }
+    @Override
+    public int getItemCount() {
+        return super.getItemCount();
+    }
 
-        @Override
-        public void cleanup () {
-            super.cleanup();
+    @Override
+    public void cleanup() {
+        super.cleanup();
 
-//        setIndexInFirebase();
+        setIndexInFirebase();
 
-            mRef.removeEventListener(mChildEventListener);
-        }
+        placesReference.removeEventListener(mChildEventListener);
+    }
 
 
     private void setIndexInFirebase() {
@@ -192,7 +182,13 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
             place.setListPosition(Integer.toString(i));
 
-            getRef(i).setValue(place);
+            DatabaseReference child = placesReference.child(String.valueOf(place.getGlobalID()));
+
+            child.setValue(place);
+
+//            DatabaseReference ref = getRef(i);
+//
+//            ref.setValue(place);
 
         }
 

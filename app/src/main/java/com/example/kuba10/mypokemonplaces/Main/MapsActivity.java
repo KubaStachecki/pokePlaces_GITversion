@@ -304,15 +304,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void savePlace(PokePlace place) {
 
-        Date date = new Date();
-        Long id = date.getTime();
 
-        placesRef.child(id.toString()).setValue(place, new DatabaseReference.CompletionListener() {
+
+        placesRef.child(Long.toString(place.getGlobalID())).setValue(place, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
                 if (databaseError != null) {
+
                     showSnackbar("Error while saving :(");
+
                 } else {
+
                     showSnackbar("Place saved successfully.");
                 }
             }
@@ -321,8 +324,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-        date = null;
-        id = null;
 
 
     }
