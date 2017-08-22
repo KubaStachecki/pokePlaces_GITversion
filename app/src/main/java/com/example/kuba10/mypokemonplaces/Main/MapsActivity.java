@@ -16,16 +16,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
-import com.example.kuba10.mypokemonplaces.ListFragment.ListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.R;
@@ -41,8 +38,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -82,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FloatingActionButton fab;
 
     @BindView(R.id.sad_pikatchu)
-    ImageView sadPikatchu;
+    ImageView pikatchuSplash;
 
     @BindView(R.id.fab2)
     FloatingActionButton fab2;
@@ -97,23 +92,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ButterKnife.bind(this);
 
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(map);
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mainPresenter = new MapsPresenter(this);
+        pikatchuSplash.setImageResource(R.drawable.pika);
+        pikatchuSplash.setVisibility(View.VISIBLE);
 
-        fragmentManager = this.getSupportFragmentManager();
-        placeList = new ArrayList<>();
+        prepareObjects();
 
 
-        if(checkPermissions()){
-
+        if (checkPermissions()) {
             initView();
-
-        }else{
-
-            requestPermission();}
+        } else {
+            requestPermission();
+        }
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -121,16 +111,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
 
                 getLocation();
-
                 if (latitude != 0 && longitude != 0) {
                     LatLng current = new LatLng(latitude, longitude);
-
                     openFragment(AddPlaceFragment.newInstance(current));
-
-
-//                    if( fragmentManager.getBackStackEntryCount() < 1) {
-//
-//                    }
 
                 } else {
                     showSnackbar(getString(R.string.unavaliable));
@@ -148,36 +131,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 openFragment(FirebaseListFragment.newInstance());
 
-//              if( fragmentManager.getBackStackEntryCount() < 1) {
-//
-//                 }
-
             }
         });
 
 
     }
 
+    private void prepareObjects() {
+
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(map);
+        mapFragment.getView().setVisibility(View.INVISIBLE);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mainPresenter = new MapsPresenter(this);
+        fragmentManager = this.getSupportFragmentManager();
+        placeList = new ArrayList<>();
+    }
+
     private void initView() {
+
         mapFragment.getMapAsync(this);
 
         if (checkPermissions()) {
-        setupDatabase();
-        getPlacesList();
-        getLocation();}
-
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-
+            setupDatabase();
+            getPlacesList();
+            getLocation();
+        }
 
     }
 
     private void setupDatabase() {
-
         fDatabase = FirebaseDatabase.getInstance();
         placesRef = fDatabase.getReference().child(Constants.PLACES);
     }
@@ -185,6 +168,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        pikatchuSplash.setVisibility(View.GONE);
+        mapFragment.getView().setVisibility(View.VISIBLE);
+
         mMap = googleMap;
         styleMap(googleMap);
 
@@ -205,26 +192,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-    }
-
-    private void styleMap(GoogleMap googleMap) {
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.setBuildingsEnabled(true);
-
-        try {
-
-            boolean success = googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.style1));
-
-            if (!success) {
-                Log.e(TAG, "Style parsing failed.");
-                showSnackbar("map style not loaded");
-            }
-        } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Can't find style. Error: ", e);
-        }
     }
 
 
@@ -292,39 +259,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
     public void getPlacesList() {
-
-
-//        mChildEventListener = placesRef.addChildEventListener(new ChildEventListener() {
-//
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                placeList.add(dataSnapshot.getValue(PokePlace.class));
-//                Log.d("MAIN LIST : ", "" + placeList.size());
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//                placemarkers();
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                placemarkers();
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//                placemarkers();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            }
-//        });
-
 
         placesRef.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
 
@@ -336,18 +271,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     placeList.add(pokePlace);
                 }
 
-                Log.d("-----LISTA FIREBASE", "   " + placeList.size());
-
+                Log.d("LISTA FIREBASE", "   " + placeList.size());
                 placemarkers();
 
             }
 
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                showSnackbar("Error - check internet connection");
                 Log.d("LISTA FIREBASE", "database connection error");
-
                 showSnackbar(getString(R.string.dataError));
 
             }
@@ -357,10 +288,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void savePlace(PokePlace place) {
 
-//        place.setLong(longitude);
-//        place.setLat(latitude);
         Date date = new Date();
-
         Long id = date.getTime();
 
         placesRef.child(id.toString()).setValue(place, new DatabaseReference.CompletionListener() {
@@ -368,8 +296,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError != null) {
                     showSnackbar("Error while saving :(");
-
-
                 } else {
                     showSnackbar("Place saved successfully.");
                 }
@@ -403,12 +329,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             return false;
-
-        }else {
-
-            return true;
         }
+        return true;
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -416,21 +340,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
             initView();
-
             mapFragment.getView().setVisibility(View.VISIBLE);
-            sadPikatchu.setVisibility(View.INVISIBLE);
 
-        }else{
+        } else {
 
             mapFragment.getView().setVisibility(View.INVISIBLE);
-            sadPikatchu.setVisibility(View.VISIBLE);
+            pikatchuSplash.setImageResource(R.drawable.sad_pika);
             showSnackbar("App will not work without GPS");
-
-
-
-
         }
 
     }
@@ -450,18 +367,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        FirebaseListFragment listFragment = (FirebaseListFragment) fragmentManager.findFragmentById(R.id.coordinator);
 //        listFragment.cleanup();
 
-
     }
 
 
-    public void findPlaceFromList(PokePlace place){
+    public void findPlaceFromList(PokePlace place) {
 
         Double lat = place.getLat();
         Double lng = place.getLong();
-
         LatLng selectedPlace = new LatLng(lat, lng);
-
-
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(selectedPlace)
                 .zoom(18)
@@ -471,9 +384,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
-
     }
 
+    private void styleMap(GoogleMap googleMap) {
+
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.setBuildingsEnabled(true);
+
+        try {
+
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.style1));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+                showSnackbar("map style not loaded");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+    }
 
 
 }

@@ -15,6 +15,9 @@ import com.example.kuba10.mypokemonplaces.R;
 public class LoginFragment extends Fragment {
 
 
+    //TODO jesli starczy czasu...
+
+
     public LoginFragment() {
         // Required empty public constructor
     }

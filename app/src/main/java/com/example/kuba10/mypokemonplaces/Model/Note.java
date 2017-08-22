@@ -6,6 +6,6 @@ package com.example.kuba10.mypokemonplaces.Model;
 
 public class Note {
 
-    //TODO
+    //TODO funkcja zapisywaniaq notatek bez miejsc jesli starczy czasu
 
 }
