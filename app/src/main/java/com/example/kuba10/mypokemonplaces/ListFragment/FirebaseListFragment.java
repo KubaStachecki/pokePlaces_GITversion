@@ -84,6 +84,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
                 R.layout.place_card_layout, CardViewHolder.class,
                 orderByChild, this, this);
 
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(mFirebaseAdapter);

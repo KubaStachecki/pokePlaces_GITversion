@@ -26,7 +26,7 @@ import java.util.Collections;
 
 public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlace, CardViewHolder> implements ItemTouchHelperAdapter {
 
-    private DatabaseReference placesReference;
+    private final Query ref;
     private ChildEventListener mChildEventListener;
     private ArrayList<PokePlace> places;
     private FirebaseListFragment parentFragment;
@@ -38,32 +38,30 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
 
         super(modelClass, modelLayout, viewHolderClass, ref);
+
         mOnStartDragListener = onStartDragListener;
         places = new ArrayList<>();
         parentFragment = fragment;
 
-        placesReference = FirebaseDatabase.getInstance().getReference().child(Constants.PLACES);
 
-        mChildEventListener = placesReference.addChildEventListener(new ChildEventListener() {
+
+        this.ref = ref;
+        mChildEventListener = this.ref.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 places.add(dataSnapshot.getValue(PokePlace.class));
-                Log.d("CHILD ADD LIST SIZE : ", "" + places.size());
+//                Log.d("CHILD ADD LIST SIZE : ", "" + places.size());
             }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
-
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -75,11 +73,8 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-
         Collections.swap(places, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-//        setIndexInFirebase();
-
         return false;
     }
 
@@ -87,16 +82,16 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
     @Override
     public void onItemDismiss(int position) {
 
+        PokePlace place = places.get(position);
+        DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
+        child.removeValue();
         places.remove(position);
-        getRef(position).removeValue();
-
     }
 
     @Override
     protected void populateViewHolder(final CardViewHolder viewHolder, final PokePlace place, final int position) {
 
         viewHolder.bindPokePlace(place);
-
         viewHolder.favouriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,56 +100,47 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
                     case 0:
 
+                        PokePlace place = places.get(position);
                         place.setFavourite(1);
-                        getRef(position).setValue(place);
+                        DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
+                        child.setValue(place);
+
                         viewHolder.favouriteBtn.setImageResource(R.drawable.ic_032_star);
                         break;
-
-
                     case 1:
 
-                        place.setFavourite(0);
-                        getRef(position).setValue(place);
+                        PokePlace place2 = places.get(position);
+                        place2.setFavourite(0);
+                        DatabaseReference child2 = ref.getRef().child(String.valueOf(place2.getGlobalID()));
+                        child2.setValue(place2);
+
                         viewHolder.favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
                         break;
-
-
                 }
-
-
             }
         });
 
 
-        viewHolder.image.setOnTouchListener(new View.OnTouchListener() {
+        viewHolder.dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                     mOnStartDragListener.onStartDrag(viewHolder);
-                } else if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_UP) {
-                    Log.d("touh", "onTouch: up - setindex");
-
                 }
-
                 return false;
             }
         });
 
 
-        viewHolder.placeCardView.setOnClickListener(new View.OnClickListener()
+        viewHolder.showLocation.setOnClickListener(new View.OnClickListener()
 
         {
             @Override
             public void onClick(View view) {
-
                 parentFragment.dismiss();
                 parentFragment.findPosition(place);
-
-
             }
         });
-
-
     }
 
     @Override
@@ -165,46 +151,18 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
     @Override
     public void cleanup() {
         super.cleanup();
-
         setIndexInFirebase();
-
-        placesReference.removeEventListener(mChildEventListener);
+        ref.removeEventListener(mChildEventListener);
     }
 
 
     private void setIndexInFirebase() {
-
-        Log.d("touh", "setindex - !!!!");
-
         for (int i = 0; i < places.size(); i++) {
-
             PokePlace place = places.get(i);
-
             place.setListPosition(Integer.toString(i));
-
-            DatabaseReference child = placesReference.child(String.valueOf(place.getGlobalID()));
-
+            DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
             child.setValue(place);
-
-//            DatabaseReference ref = getRef(i);
-//
-//            ref.setValue(place);
-
         }
-
-
-//        if (places.size() != 0) {
-//            for (PokePlace place : places) {
-//                int index = places.indexOf(place);
-//                Log.d("KEY : ", "" + getRef(index).getKey().toString());
-//                DatabaseReference ref = getRef(index);
-//                place.setListPosition(Integer.toString(index));
-//                ref.setValue(place);
-//
-//            }
-
     }
-
-
 }
 

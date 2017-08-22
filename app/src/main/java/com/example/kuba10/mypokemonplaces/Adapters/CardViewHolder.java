@@ -18,7 +18,7 @@ import com.example.kuba10.mypokemonplaces.R;
 public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private TextView title, description;
-    public ImageView image;
+    public ImageView image, dragHandle, showLocation;
     public CardView placeCardView;
     public ImageButton favouriteBtn;
 
@@ -40,10 +40,15 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         title = (TextView) view.findViewById(R.id.title_text);
         description = (TextView) view.findViewById(R.id.description_text);
         image = (ImageView) view.findViewById(R.id.card_image);
+        dragHandle = (ImageView) view.findViewById(R.id.drag_handle);
+        showLocation = (ImageView) view.findViewById(R.id.show_on_map_button);
+        image = (ImageView) view.findViewById(R.id.card_image);
         favouriteBtn = (ImageButton) view.findViewById(R.id.favourite_button);
         placeCardView = (CardView) view.findViewById(R.id.placeCardView);
 
         image.setImageResource(R.drawable.ic_034_pikachu_1);
+        dragHandle.setImageResource(R.drawable.ic_drag_handle_black_24dp);
+        showLocation.setImageResource(R.drawable.ic_001_pointer);
 
 
         title.setText(place.getTitle());
