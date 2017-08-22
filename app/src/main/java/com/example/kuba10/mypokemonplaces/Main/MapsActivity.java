@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -93,11 +94,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ButterKnife.bind(this);
 
 
-        pikatchuSplash.setImageResource(R.drawable.pika);
-        pikatchuSplash.setVisibility(View.VISIBLE);
-
+        setSplashScreen();
         prepareObjects();
-
 
         if (checkPermissions()) {
             initView();
@@ -105,7 +103,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             requestPermission();
         }
 
+        setFabListeners();
 
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private void setFabListeners() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,8 +148,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+    }
+
+    private void setSplashScreen() {
+        pikatchuSplash.setImageResource(R.drawable.pika);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                        pikatchuSplash.setVisibility(View.GONE);
 
 
+            }
+        }, 3000);
     }
 
     private void prepareObjects() {
@@ -158,6 +186,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             getLocation();
         }
 
+
+
     }
 
     private void setupDatabase() {
@@ -169,7 +199,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        pikatchuSplash.setVisibility(View.GONE);
         mapFragment.getView().setVisibility(View.VISIBLE);
 
         mMap = googleMap;
@@ -200,20 +229,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.clear();
         for (PokePlace place : placeList) {
 
-//            Log.d("LISTA FIREBASE", "   " + place.getTitle());
-//            Log.d("LISTA FIREBASE", "   " + place.getLat());
-//            Log.d("LISTA FIREBASE", "   " + place.getLong());
-
-
             mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(place.getLat(), place.getLong()))
                     .title(place.getTitle())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_mid)
                     ));
-
-
         }
-
 
     }
 
@@ -270,7 +291,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     PokePlace pokePlace = child.getValue(PokePlace.class);
                     placeList.add(pokePlace);
                 }
-
                 Log.d("LISTA FIREBASE", "   " + placeList.size());
                 placemarkers();
 

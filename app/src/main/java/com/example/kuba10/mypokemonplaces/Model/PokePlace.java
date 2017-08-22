@@ -32,16 +32,22 @@ public class PokePlace implements Parcelable {
     @Expose
     private String title;
 
+    @SerializedName("pokemonId")
+    @Expose
+    private int pokemonId;
+
+
     public PokePlace (){
 
     }
 
-    public PokePlace(String desctription, Double lat, Double lng, String listPosition, String test2, String title) {
+    public PokePlace(String desctription, Double lat, Double lng, String listPosition, String test2, String title, int favourite, int pokemonId) {
         this.desctription = desctription;
         this.lat = lat;
         this.lng = lng;
         this.listPosition = listPosition;
         this.favourite = favourite;
+        this.pokemonId = pokemonId;
         this.title = title;
     }
 
@@ -50,6 +56,7 @@ public class PokePlace implements Parcelable {
         listPosition = in.readString();
         favourite = in.readInt();
         title = in.readString();
+        pokemonId = in.readInt();
     }
 
     public static final Creator<PokePlace> CREATOR = new Creator<PokePlace>() {
@@ -63,6 +70,15 @@ public class PokePlace implements Parcelable {
             return new PokePlace[size];
         }
     };
+
+    public int getPokemonId() {
+        return pokemonId;
+    }
+
+    public void setPokemonId(int pokemonId) {
+        this.pokemonId = pokemonId;
+    }
+
 
     public String getDesctription() {
         return desctription;
@@ -119,10 +135,14 @@ public class PokePlace implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+
         parcel.writeString(desctription);
         parcel.writeString(listPosition);
         parcel.writeInt(favourite);
         parcel.writeString(title);
+        parcel.writeInt(pokemonId);
     }
+
+
 }
 

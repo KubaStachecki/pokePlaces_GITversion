@@ -2,9 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:layout_margin="20dp"
+    android:layout_margin="5dp"
     android:background="@drawable/rounded_btn"
     android:backgroundTint="@color/background"
     android:clickable="true"
@@ -21,7 +21,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:text="Add Place"
-        android:textColor="@android:color/white"
+        android:textColor="@color/addFragmentText"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -29,30 +29,31 @@
         android:id="@+id/pokemon_image_view"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:padding="30dp"
-        android:src="@drawable/ic_034_pikachu_1" />
+        android:src="@drawable/chose_icon"
+        android:layout_margin="8dp"
+        />
 
     <EditText
         android:id="@+id/title_input"
         android:layout_width="match_parent"
 
         android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/white"
+        android:backgroundTint="@color/addFragmentText"
         android:hint="title"
         android:inputType="textPersonName"
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white" />
+
+        android:textColor="@color/addFragmentText"
+        android:textColorHint="@color/addFragmentText" />
 
     <EditText
         android:id="@+id/description_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/white"
+        android:backgroundTint="@color/addFragmentText"
         android:hint="description"
         android:inputType="textPersonName"
-
-        android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white" />
+        android:textColor="@color/addFragmentText"
+        android:textColorHint="@color/addFragmentText" />
 
     <Button
         android:id="@+id/add_button"
@@ -62,7 +63,7 @@
         android:background="@drawable/rounded_btn_outline"
         android:foregroundTint="@android:color/white"
         android:text="Add"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/addFragmentText" />
 
     <Button
         android:id="@+id/cancel_button"
@@ -72,6 +73,6 @@
         android:drawableTint="@android:color/white"
         android:foregroundTint="@android:color/white"
         android:text="Cancel"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/addFragmentText" />
 
 </LinearLayout>

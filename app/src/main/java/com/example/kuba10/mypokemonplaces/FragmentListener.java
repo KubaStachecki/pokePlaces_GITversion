@@ -1,5 +1,7 @@
 package com.example.kuba10.mypokemonplaces;
 
+import android.support.v4.app.Fragment;
+
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 
 /**
@@ -13,5 +15,7 @@ public interface FragmentListener {
     void showSnackbar(String text);
 
     void findPlaceFromList(PokePlace place);
+
+    void openFragment(Fragment fragment);
 
 }

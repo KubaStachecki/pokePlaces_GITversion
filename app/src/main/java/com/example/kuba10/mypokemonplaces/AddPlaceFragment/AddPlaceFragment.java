@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kuba10.mypokemonplaces.ChooseFragment.ChooseFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.R;
@@ -24,6 +26,9 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class AddPlaceFragment extends Fragment {
+
+    @BindView(R.id.pokemon_image_view)
+    ImageView pokemonImageView;
 
     @BindView(R.id.description_input)
     TextView descriptionField;
@@ -73,7 +78,6 @@ public class AddPlaceFragment extends Fragment {
                 double lat = position.latitude;
                 double lng = position.longitude;
 
-
                 PokePlace place = new PokePlace();
 
                 if (titleField.getText().toString().equals("")){
@@ -83,27 +87,16 @@ public class AddPlaceFragment extends Fragment {
                     place.setTitle(titleField.getText().toString());
                     place.setTitle(titleField.getText().toString());
                     place.setDesctription(descriptionField.getText().toString());
-
                     place.setLong(lng);
                     place.setLat(lat);
-
                     place.setListPosition("list_index_not_set");
                     place.setFavourite(0);
-
+                    place.setPokemonId(-777);
                 }
 
-
-//                fragmentListener.savePlace(
-//                        new PokePlace(descriptionField.getText().toString(), lat, lng, 2147483647, "test2", titleField.getText().toString()));
-
-
-                    fragmentListener.savePlace(place);
-
+                fragmentListener.savePlace(place);
                 place = null;
-
                 dismiss();
-
-
 
             }
     });
@@ -113,11 +106,22 @@ public class AddPlaceFragment extends Fragment {
     {
         @Override
         public void onClick (View view){
-
             dismiss();
-
-    }
+        }
     });
+
+
+        pokemonImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fragmentListener.openFragment(ChooseFragment.newInstance());
+
+            }
+        });
+
+
+
 
 
         return view;
