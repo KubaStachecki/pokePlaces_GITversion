@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
@@ -74,6 +75,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinatorLayout;
 
+    @BindView(R.id.fragmentFrame)
+    FrameLayout fragmentContainer;
+
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -87,7 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_container);
         setRequestedOrientation(ActivityInfo
                 .SCREEN_ORIENTATION_PORTRAIT);
 
@@ -95,6 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         setSplashScreen();
+
         prepareObjects();
 
         if (checkPermissions()) {
@@ -107,17 +112,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void setFabListeners() {
@@ -151,19 +145,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void setSplashScreen() {
+
         pikatchuSplash.setImageResource(R.drawable.pika);
+        pikatchuSplash.setVisibility(View.VISIBLE);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-                        pikatchuSplash.setVisibility(View.GONE);
 
+                if (checkPermissions()) {
+                    pikatchuSplash.setVisibility(View.GONE);}}
 
-            }
-        }, 3000);
-    }
+            },3000);
+        }
+
 
     private void prepareObjects() {
 
@@ -185,7 +182,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             getPlacesList();
             getLocation();
         }
-
 
 
     }
@@ -336,7 +332,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
-                .add(R.id.coordinator, fragment)
+                .add(R.id.fragmentFrame, fragment)
                 .addToBackStack(null)
                 .commit();
 

@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.kuba10.mypokemonplaces.ChooseFragment.ChooseFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.R;
@@ -115,7 +114,7 @@ public class AddPlaceFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                fragmentListener.openFragment(ChooseFragment.newInstance());
+//                fragmentListener.openFragment(ChooseFragment.newInstance());
 
             }
         });
