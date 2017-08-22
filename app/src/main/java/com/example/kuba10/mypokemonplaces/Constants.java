@@ -14,7 +14,7 @@ public final class Constants {
 
     public static final String PLACES = "places";
 
-    //request code for location permissions
+    //request code for location permissions,,,,
 
 
     public static final int REQUEST_GPS_PERMISSION = 786;
