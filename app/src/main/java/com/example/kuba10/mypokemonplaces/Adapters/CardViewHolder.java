@@ -26,8 +26,6 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     Context mContext;
 
 
-
-
     public CardViewHolder(View view) {
         super(view);
         this.view = view;
@@ -36,7 +34,7 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     }
 
-    public void bindPokePlace(PokePlace place){
+    public void bindPokePlace(PokePlace place) {
 
 
         title = (TextView) view.findViewById(R.id.title_text);
@@ -45,10 +43,27 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         favouriteBtn = (ImageButton) view.findViewById(R.id.favourite_button);
         placeCardView = (CardView) view.findViewById(R.id.placeCardView);
 
+        image.setImageResource(R.drawable.ic_034_pikachu_1);
+
+
         title.setText(place.getTitle());
         description.setText(place.getDesctription());
 
-        image.setImageResource(R.drawable.ic_034_pikachu_1);
+        switch (place.getFavourite()) {
+
+            case 0:
+
+                favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
+                break;
+
+            case 1:
+
+                favouriteBtn.setImageResource(R.drawable.ic_032_star);
+                break;
+
+        }
+
+
     }
 
     @Override

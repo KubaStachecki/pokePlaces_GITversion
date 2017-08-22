@@ -101,14 +101,44 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
     }
 
     @Override
-    protected void populateViewHolder(final CardViewHolder viewHolder, final PokePlace place, int position) {
+    protected void populateViewHolder(final CardViewHolder viewHolder, final PokePlace place, final int position) {
 
         viewHolder.bindPokePlace(place);
 
-
-        viewHolder.image.setOnTouchListener(new View.OnTouchListener() {
+        viewHolder.favouriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
+
+                switch (place.getFavourite()) {
+
+                    case 0:
+
+                        place.setFavourite(1);
+                        getRef(position).setValue(place);
+                        viewHolder.favouriteBtn.setImageResource(R.drawable.ic_032_star);
+                        break;
+
+
+                    case 1:
+
+                        place.setFavourite(0);
+                        getRef(position).setValue(place);
+                        viewHolder.favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
+                        break;
+
+
+
+                }
+
+
+            } });
+
+
+
+
+                viewHolder.image.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch (View v, MotionEvent event){
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                     mOnStartDragListener.onStartDrag(viewHolder);
                 } else if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_UP) {
@@ -118,37 +148,38 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
                 return false;
             }
-        });
+            });
 
 
-        viewHolder.placeCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        viewHolder.placeCardView.setOnClickListener(new View.OnClickListener()
+
+            {
+                @Override
+                public void onClick (View view){
 
                 parentFragment.dismiss();
                 parentFragment.findPosition(place);
 
 
-
             }
-        });
+            });
 
 
-    }
+        }
 
-    @Override
-    public int getItemCount() {
-        return super.getItemCount();
-    }
+        @Override
+        public int getItemCount () {
+            return super.getItemCount();
+        }
 
-    @Override
-    public void cleanup() {
-        super.cleanup();
+        @Override
+        public void cleanup () {
+            super.cleanup();
 
 //        setIndexInFirebase();
 
-        mRef.removeEventListener(mChildEventListener);
-    }
+            mRef.removeEventListener(mChildEventListener);
+        }
 
 
     private void setIndexInFirebase() {
