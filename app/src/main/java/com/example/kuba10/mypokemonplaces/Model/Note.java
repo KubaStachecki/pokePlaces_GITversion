@@ -6,6 +6,6 @@ package com.example.kuba10.mypokemonplaces.Model;
 
 public class Note {
 
-    //TODO  notes saving as separate functionality - if time allows...
+    //TODO  notes saving as separate functionality - if time allows... but hardly.
 
 }

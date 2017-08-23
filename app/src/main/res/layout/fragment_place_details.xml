@@ -69,28 +69,54 @@
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/details_favourite_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@android:color/transparent"
-                android:padding="3dp"
-                android:scaleType="fitXY"
-                card_view:srcCompat="@drawable/ic_032_star_empty" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="60dp"
-                android:layout_height="30dp" />
+                <ImageButton
+                    android:id="@+id/details_favourite_button"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:padding="3dp"
+                    android:scaleType="fitXY"
+                    card_view:srcCompat="@drawable/ic_032_star_empty" />
 
-            <ImageButton
-                android:id="@+id/details_show_on_map_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Make Favourite" />
+            </LinearLayout>
 
-                android:background="@android:color/transparent"
-                android:padding="3dp"
-                android:scaleType="fitXY"
-                card_view:srcCompat="@drawable/ic_001_pointer" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/details_show_on_map_button"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+
+                    android:background="@android:color/transparent"
+                    android:padding="3dp"
+                    android:scaleType="fitXY"
+                    card_view:srcCompat="@drawable/ic_001_pointer" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Show on map!" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

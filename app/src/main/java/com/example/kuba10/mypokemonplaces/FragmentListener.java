@@ -19,7 +19,7 @@ public interface FragmentListener {
 
     void openFragment(Fragment fragment);
 
-    void openTaggedFragment(Fragment fragment);
+    void openTaggedFragment(Fragment fragment, String tag);
 
     void dismiss(Fragment fragment);
 

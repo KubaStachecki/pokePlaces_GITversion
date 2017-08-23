@@ -52,6 +52,8 @@ import static com.example.kuba10.mypokemonplaces.R.id.map;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, MapsContract.View, FragmentListener {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
+    public static final String ADD_FRAGMENT_TAG = "ADD";
+    public static final String LIST_FRAGMENT_TAG = "LIST";
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
     private double latitude;
@@ -64,6 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DatabaseReference placesRef;
     ArrayList<PokemonGo> pokemonGo_data_list;
     private RetrofitConnection restDownload;
+    ImageView pikatchuSplashSad;
 
 
     @BindView(R.id.coordinator)
@@ -74,6 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FloatingActionButton fab;
     @BindView(R.id.sad_pikatchu)
     ImageView pikatchuSplash;
+
     @BindView(R.id.fab2)
     FloatingActionButton fab2;
 
@@ -112,7 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getLocation();
                 if (latitude != 0 && longitude != 0) {
                     LatLng current = new LatLng(latitude, longitude);
-                    openTaggedFragment(AddPlaceFragment.newInstance(current, pokemonGo_data_list));
+                    openTaggedFragment(AddPlaceFragment.newInstance(current, pokemonGo_data_list), ADD_FRAGMENT_TAG);
 
                 } else {
                     showSnackbar(getString(R.string.unavaliable));
@@ -126,13 +130,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
 
-                openFragment(FirebaseListFragment.newInstance());
+                openTaggedFragment(FirebaseListFragment.newInstance(), LIST_FRAGMENT_TAG);
 
             }
         });
     }
 
     private void setSplashScreen() {
+
+        pikatchuSplashSad = pikatchuSplash;
+        pikatchuSplashSad.setVisibility(View.INVISIBLE);
 
         pikatchuSplash.setImageResource(R.drawable.pika);
         pikatchuSplash.setVisibility(View.VISIBLE);
@@ -141,11 +148,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                pikatchuSplash.setVisibility(View.GONE);
 
-
-                if (checkPermissions()) {
-                    pikatchuSplash.setVisibility(View.GONE);
-                }
             }
 
         }, 3000);
@@ -329,12 +333,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void openTaggedFragment(Fragment fragment) {
+    public void openTaggedFragment(Fragment fragment, String tag) {
 
         fragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
-                .add(R.id.fragmentFrame, fragment, "AddFragment")
+                .add(R.id.fragmentFrame, fragment, tag)
                 .addToBackStack(null)
                 .commit();
 
@@ -364,9 +368,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         } else {
 
+            pikatchuSplashSad.setImageResource(R.drawable.sad_pika);
+            pikatchuSplashSad.setVisibility(View.VISIBLE);
             mapFragment.getView().setVisibility(View.INVISIBLE);
-            pikatchuSplash.setImageResource(R.drawable.sad_pika);
-            showSnackbar("App will not work without GPS");
+            showSnackbar("App will not work without GPS :(");
         }
 
     }
