@@ -42,7 +42,7 @@ public class PokemonGo {
     private Double spawnChance;
     @SerializedName("avg_spawns")
     @Expose
-    private Integer avgSpawns;
+    private Double avgSpawns;
     @SerializedName("spawn_time")
     @Expose
     private String spawnTime;
@@ -132,11 +132,11 @@ public class PokemonGo {
         this.spawnChance = spawnChance;
     }
 
-    public Integer getAvgSpawns() {
+    public Double getAvgSpawns() {
         return avgSpawns;
     }
 
-    public void setAvgSpawns(Integer avgSpawns) {
+    public void setAvgSpawns(Double avgSpawns) {
         this.avgSpawns = avgSpawns;
     }
 

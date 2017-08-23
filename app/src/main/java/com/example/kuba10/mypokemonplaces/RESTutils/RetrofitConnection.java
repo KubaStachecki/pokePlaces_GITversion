@@ -26,11 +26,10 @@ public class RetrofitConnection {
     List<PokemonGo> pokemonList;
 
 
-
     public void downloadPokemonList() {
 
 
-     pokemonList = new ArrayList<>();
+        pokemonList = new ArrayList<>();
 
 
         retrofit = new Retrofit.Builder()
@@ -43,24 +42,22 @@ public class RetrofitConnection {
 
         pokeRetrofit.listPokemons().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<PokemonGo>() {
+                .subscribe(new Observer<List<PokemonGo>>() {
                     @Override
                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@io.reactivex.annotations.NonNull PokemonGo pokemon) {
-                        pokemonList.add(pokemon);
+                    public void onNext(@io.reactivex.annotations.NonNull List<PokemonGo> pokemon) {
+                        pokemonList.addAll(pokemon);
                         Log.e("NEXT RETROFIT", "" + pokemonList.size());
 
-                        Log.e("Pokemon", "" +pokemon.getName());
-                        Log.e("Pokemon", "" +pokemon.getWeight());
-                        Log.e("Pokemon", "" +pokemon.getId());
-                        Log.e("Pokemon", "" +pokemon.getImg());
-                        Log.e("Pokemon", "" +pokemon.getAvgSpawns());
-
-
+//                        Log.e("Pokemon", "" +pokemon.getName());
+//                        Log.e("Pokemon", "" +pokemon.getWeight());
+//                        Log.e("Pokemon", "" +pokemon.getId());
+//                        Log.e("Pokemon", "" +pokemon.getImg());
+//                        Log.e("Pokemon", "" +pokemon.getAvgSpawns());
 
 
                     }
@@ -75,16 +72,30 @@ public class RetrofitConnection {
                     public void onComplete() {
                         Log.d("COMPLETE RETROFIT", "lista z retro sciagneita : " + pokemonList.size());
 
+                        for (PokemonGo pokemon : pokemonList) {
+
+                            Log.e("Pokemon", "" + pokemon.getName());
+                            Log.e("Pokemon", "" + pokemon.getWeight());
+                            Log.e("Pokemon", "" + pokemon.getId());
+                            Log.e("Pokemon", "" + pokemon.getImg());
+                            Log.e("Pokemon", "" + pokemon.getAvgSpawns());}
+
                     }
                 });
-    }
+
+
+
+
+        }
+
+
+
 
 
     public List<PokemonGo> getPokemonList() {
 
         return pokemonList;
     }
-
 
 
 }

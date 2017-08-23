@@ -17,6 +17,6 @@ import retrofit2.http.Path;
 
 
 public interface PokeApiService {
-    @GET("pokedex.json")
-    Observable<PokemonGo> listPokemons();
+    @GET("pokedex2.json")
+    Observable <List<PokemonGo>> listPokemons();
 }
