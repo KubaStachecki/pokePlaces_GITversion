@@ -19,6 +19,13 @@ public final class Constants {
 
     public static final int REQUEST_GPS_PERMISSION = 786;
 
+    public static final String ADD_FRAGMENT_TAG = "ADD";
+    public static final String LIST_FRAGMENT_TAG = "LIST";
+    public static final String LIST = "list";
+    public static final String POSITION = "position";
+    public static final String DETAIL_POKEMON = "DetailPokemon";
+
+
 
 
 }

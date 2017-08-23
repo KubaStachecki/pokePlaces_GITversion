@@ -16,9 +16,12 @@ import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.SimpleItemTouchHe
 import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
+import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -132,19 +135,27 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     }
 
-   public void openDetails(Fragment fragment){
+    public void openDetails(Fragment fragment) {
 
 
-       fragmentListener.openFragment(fragment);
+        fragmentListener.openFragment(fragment);
     }
 
 
-public Query getQuery(){return orderByChild; }
+    public Query getQuery() {
+        return orderByChild;
+    }
 
-    public void refreshList(){
+    public void refreshList() {
 
         recyclerView.invalidate();
 
     }
+
+    public ArrayList<PokemonGo> sendPokemonListToAdapter() {
+
+        return fragmentListener.getPokemonList();
+    }
+
 
 }

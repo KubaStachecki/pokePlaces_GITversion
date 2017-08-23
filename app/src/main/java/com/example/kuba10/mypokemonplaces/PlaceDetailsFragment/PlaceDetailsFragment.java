@@ -12,31 +12,35 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
+import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.squareup.picasso.Picasso;
 
-import static com.example.kuba10.mypokemonplaces.Main.MapsActivity.LIST_FRAGMENT_TAG;
+import java.util.ArrayList;
 
 public class PlaceDetailsFragment extends DialogFragment {
 
 
-    public static final String DETAIL_POKEMON = "DetailPokemon";
     private TextView title, description;
     public ImageView image, showLocation;
     public ImageButton favouriteBtn;
     private PokePlace place;
-    private FirebaseListFragment parentFragment ;
+    private ArrayList<PokemonGo> pokemons;
+
+    private FirebaseListFragment parentFragment;
     Query query;
 
     public static PlaceDetailsFragment newInstance(PokePlace place) {
 
         PlaceDetailsFragment fragment = new PlaceDetailsFragment();
         Bundle args = new Bundle();
-        args.putParcelable(DETAIL_POKEMON, place);
+        args.putParcelable(Constants.DETAIL_POKEMON, place);
         fragment.setArguments(args);
 
         return fragment;
@@ -53,8 +57,8 @@ public class PlaceDetailsFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 
-            place = getArguments().getParcelable(DETAIL_POKEMON);
-            parentFragment = (FirebaseListFragment) getFragmentManager().findFragmentByTag(LIST_FRAGMENT_TAG);
+            place = getArguments().getParcelable(Constants.DETAIL_POKEMON);
+            parentFragment = (FirebaseListFragment) getFragmentManager().findFragmentByTag(Constants.LIST_FRAGMENT_TAG);
             query = parentFragment.getQuery();
         }
     }
@@ -73,6 +77,8 @@ public class PlaceDetailsFragment extends DialogFragment {
 
 
         View view = inflater.inflate(R.layout.fragment_place_details, container, false);
+
+        pokemons = parentFragment.sendPokemonListToAdapter();
 
         title = (TextView) view.findViewById(R.id.details_title);
         description = (TextView) view.findViewById(R.id.details_description);
@@ -96,6 +102,17 @@ public class PlaceDetailsFragment extends DialogFragment {
                 break;
 
         }
+
+
+        if (place.getPokemonId() == -777) {
+
+            image.setImageResource(R.drawable.ic_034_pikachu_1);
+
+        } else {
+
+            setPokemonImage(place, image);
+        }
+
 
         favouriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +151,6 @@ public class PlaceDetailsFragment extends DialogFragment {
         });
 
 
-
         showLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,6 +163,12 @@ public class PlaceDetailsFragment extends DialogFragment {
         });
 
         return view;
+    }
+
+    private void setPokemonImage(PokePlace place, ImageView image) {
+        Picasso.with(parentFragment.getContext())
+                .load(pokemons.get(place.getPokemonId()).getImg())
+                .into(image);
     }
 
     @Override

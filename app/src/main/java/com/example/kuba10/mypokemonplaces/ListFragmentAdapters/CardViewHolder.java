@@ -45,7 +45,6 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         favouriteBtn = (ImageButton) view.findViewById(R.id.favourite_button);
         placeCardView = (CardView) view.findViewById(R.id.placeCardView);
 
-        image.setImageResource(R.drawable.ic_034_pikachu_1);
         dragHandle.setImageResource(R.drawable.ic_drag_handle_black_24dp);
         showLocation.setImageResource(R.drawable.ic_001_pointer);
 

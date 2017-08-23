@@ -20,11 +20,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Constants;
+import com.example.kuba10.mypokemonplaces.Model.Pokemon;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.example.kuba10.mypokemonplaces.RESTutils.RetrofitConnection;
@@ -43,7 +45,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -51,9 +55,7 @@ import static com.example.kuba10.mypokemonplaces.R.id.map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, MapsContract.View, FragmentListener {
 
-    private static final String TAG = MapsActivity.class.getSimpleName();
-    public static final String ADD_FRAGMENT_TAG = "ADD";
-    public static final String LIST_FRAGMENT_TAG = "LIST";
+
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
     private double latitude;
@@ -64,9 +66,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<PokePlace> placeList;
     private FirebaseDatabase fDatabase;
     private DatabaseReference placesRef;
-    ArrayList<PokemonGo> pokemonGo_data_list;
+    private ArrayList<PokemonGo> pokemonGo_data_list;
     private RetrofitConnection restDownload;
-    ImageView pikatchuSplashSad;
+    private ImageView pikatchuSplashSad;
 
 
     @BindView(R.id.coordinator)
@@ -116,7 +118,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getLocation();
                 if (latitude != 0 && longitude != 0) {
                     LatLng current = new LatLng(latitude, longitude);
-                    openTaggedFragment(AddPlaceFragment.newInstance(current, pokemonGo_data_list), ADD_FRAGMENT_TAG);
+
+                    openTaggedFragment(AddPlaceFragment.newInstance(current, pokemonGo_data_list), Constants.ADD_FRAGMENT_TAG);
 
                 } else {
                     showSnackbar(getString(R.string.unavaliable));
@@ -130,7 +133,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
 
-                openTaggedFragment(FirebaseListFragment.newInstance(), LIST_FRAGMENT_TAG);
+                openTaggedFragment(FirebaseListFragment.newInstance(), Constants.LIST_FRAGMENT_TAG);
 
             }
         });
@@ -206,7 +209,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onMapClick(LatLng position) {
 
-                openFragment(AddPlaceFragment.newInstance(position, pokemonGo_data_list));
+                openTaggedFragment(AddPlaceFragment.newInstance(position, pokemonGo_data_list),Constants.ADD_FRAGMENT_TAG);
 
 
             }
@@ -417,11 +420,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             this, R.raw.style1));
 
             if (!success) {
-                Log.e(TAG, "Style parsing failed.");
                 showSnackbar("map style not loaded");
             }
         } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Can't find style. Error: ", e);
         }
     }
 
@@ -435,10 +436,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void sendDataToFragment(Bundle pokemon){
+    public void sendDataToAddFragment(PokemonGo pokemon) {
 
-        this.getSupportFragmentManager().findFragmentByTag("AddFragment").setArguments(pokemon);
+        AddPlaceFragment fragment = (AddPlaceFragment) this.getSupportFragmentManager().findFragmentByTag(Constants.ADD_FRAGMENT_TAG);
+        fragment.setPokemonId(pokemon);
 
+
+    }
+
+
+
+    public ArrayList<PokemonGo> getPokemonList() {
+
+        return pokemonGo_data_list;
     }
 
 }

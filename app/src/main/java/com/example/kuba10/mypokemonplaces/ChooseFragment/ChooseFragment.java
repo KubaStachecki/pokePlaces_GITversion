@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
+import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.Pokemon;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
@@ -33,22 +34,16 @@ public class ChooseFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayout errorImage;
     private FragmentListener fragmentListener;
+    private ArrayList<PokemonGo> pokemonGo_data_list;
 
-   private  ArrayList<PokemonGo> pokemonGo_data_list;
-
-
-    public ChooseFragment() {
-        // Required empty public constructor
-    }
 
     public static ChooseFragment newInstance(ArrayList<PokemonGo> pokemonGo_data_list) {
         ChooseFragment fragment = new ChooseFragment();
 
         Bundle args = new Bundle();
-        args.putParcelableArrayList(AddPlaceFragment.LIST, pokemonGo_data_list);
+        args.putParcelableArrayList(Constants.LIST, pokemonGo_data_list);
         fragment.setArguments(args);
         return fragment;
-
 
 
     }
@@ -58,7 +53,7 @@ public class ChooseFragment extends Fragment {
         super.onAttach(context);
 
         fragmentListener = (FragmentListener) context;
-        pokemonGo_data_list = getArguments().getParcelableArrayList(AddPlaceFragment.LIST);
+        pokemonGo_data_list = getArguments().getParcelableArrayList(Constants.LIST);
     }
 
     @Override

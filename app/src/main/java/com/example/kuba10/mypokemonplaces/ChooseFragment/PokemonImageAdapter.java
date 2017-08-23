@@ -94,9 +94,7 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
             @Override
             public void onClick(View view) {
 
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("SelectedPokemon", pokemonGo_data_list.get(position));
-                fragmentListener.sendDataToFragment(bundle);
+                fragmentListener.sendDataToAddFragment(pokemonGo_data_list.get(position));
                 fragment.dismiss();
 
             }

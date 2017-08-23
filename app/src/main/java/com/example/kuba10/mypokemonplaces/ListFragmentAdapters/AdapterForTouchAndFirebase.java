@@ -3,9 +3,11 @@ package com.example.kuba10.mypokemonplaces.ListFragmentAdapters;
 import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
+import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.PlaceDetailsFragment.PlaceDetailsFragment;
 import com.example.kuba10.mypokemonplaces.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -14,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +30,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
     private final Query ref;
     private ChildEventListener mChildEventListener;
     private ArrayList<PokePlace> places;
+    private ArrayList<PokemonGo> pokemons;
     private FirebaseListFragment parentFragment;
     private OnStartDragListener mOnStartDragListener;
 
@@ -41,7 +45,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         mOnStartDragListener = onStartDragListener;
         places = new ArrayList<>();
         parentFragment = fragment;
-
+        pokemons = parentFragment.sendPokemonListToAdapter();
 
         mChildEventListener = ref.addChildEventListener(new ChildEventListener() {
 
@@ -93,8 +97,6 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
     }
 
 
-
-
     @Override
     protected void populateViewHolder(final CardViewHolder viewHolder, final PokePlace place, final int position) {
 
@@ -128,6 +130,23 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
             }
         });
+
+        if (place.getPokemonId() == -777) {
+
+            viewHolder.image.setImageResource(R.drawable.ic_034_pikachu_1);
+
+        } else {
+
+            setPokemonImage(place, viewHolder.image);
+        }
+
+    }
+
+
+    private void setPokemonImage(PokePlace place, ImageView image) {
+        Picasso.with(parentFragment.getContext())
+                .load(pokemons.get(place.getPokemonId()).getImg())
+                .into(image);
     }
 
     @Override
@@ -159,10 +178,6 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
 
     }
-
-
-
-
 
 
 }

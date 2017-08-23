@@ -15,11 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kuba10.mypokemonplaces.ChooseFragment.ChooseFragment;
+import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,8 +34,7 @@ import butterknife.ButterKnife;
 
 public class AddPlaceFragment extends Fragment {
 
-    public static final String LIST = "list";
-    public static final String POSITION = "position";
+
     @BindView(R.id.pokemon_image_view)
     ImageView pokemonImageView;
 
@@ -50,22 +52,25 @@ public class AddPlaceFragment extends Fragment {
 
     private FragmentListener fragmentListener;
     private ArrayList<PokemonGo> pokemonGo_data_list;
+    private PokemonGo pokemon;
 
 
     public static AddPlaceFragment newInstance(LatLng position, ArrayList<PokemonGo> pokemonGo_data_list) {
         AddPlaceFragment fragment = new AddPlaceFragment();
         Bundle args = new Bundle();
-        args.putParcelable(POSITION, position);
-        args.putParcelableArrayList(LIST, pokemonGo_data_list);
+        args.putParcelable(Constants.POSITION, position);
+        args.putParcelableArrayList(Constants.LIST, pokemonGo_data_list);
         fragment.setArguments(args);
         return fragment;
     }
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         fragmentListener = (FragmentListener) context;
-        pokemonGo_data_list = getArguments().getParcelableArrayList(LIST);
+        pokemonGo_data_list = getArguments().getParcelableArrayList(Constants.LIST);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,11 +79,13 @@ public class AddPlaceFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+
+
         addButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                LatLng position = getArguments().getParcelable(POSITION);
+                LatLng position = getArguments().getParcelable(Constants.POSITION);
                 double lat = position.latitude;
                 double lng = position.longitude;
 
@@ -95,7 +102,12 @@ public class AddPlaceFragment extends Fragment {
                     place.setLat(lat);
                     place.setListPosition("list_index_not_set");
                     place.setFavourite(0);
-                    place.setPokemonId(-777);
+
+                    if(pokemon == null) {
+                        place.setPokemonId(-777);
+
+
+                    }else{place.setPokemonId(pokemon.getId() -1);}
 
                     Date date = new Date();
                     Long id = date.getTime();
@@ -103,7 +115,6 @@ public class AddPlaceFragment extends Fragment {
                     place.setGlobalID(id);
 
                     fragmentListener.savePlace(place);
-                    place = null;
 
                     dismiss();
 
@@ -129,6 +140,14 @@ public class AddPlaceFragment extends Fragment {
         return view;
     }
 
+    private void setPokemonImage() {
+        Picasso.with(getContext())
+                .load(pokemon.getImg())
+                .resize(100,100)
+                .centerCrop()
+                .into(pokemonImageView);
+    }
+
     public void dismiss() {
         fragmentListener.dismiss(this);
     }
@@ -141,14 +160,24 @@ public class AddPlaceFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("ADD FRAGMENT", "WYWOLALLO SIE ON RESUME");
     }
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("ADD FRAGMENT", "WYWOLALLO SIE ON PAUSE");
 
     }
+
+    public void setPokemonId(PokemonGo pokemon){
+
+        this.pokemon = pokemon;
+        setPokemonImage();
+
+
+
+
+    }
+
+
 
 
 }

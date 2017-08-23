@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
+import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
+
+import java.util.ArrayList;
 
 /**
  * Created by Kuba10 on 17.08.2017.
@@ -23,6 +26,7 @@ public interface FragmentListener {
 
     void dismiss(Fragment fragment);
 
-    void sendDataToFragment(Bundle pokemon);
+    void sendDataToAddFragment(PokemonGo pokemon);
 
+    ArrayList<PokemonGo> getPokemonList();
 }
