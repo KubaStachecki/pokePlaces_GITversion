@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +27,8 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
+
 public class AddPlaceFragment extends Fragment {
 
     public static final String LIST = "list";
@@ -62,6 +62,8 @@ public class AddPlaceFragment extends Fragment {
 
 
     }
+
+
 
 
     @Override
@@ -125,12 +127,9 @@ public class AddPlaceFragment extends Fragment {
                 dismiss();
             }
         });
-
-
         pokemonImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 fragmentListener.openFragment(ChooseFragment.newInstance(pokemonGo_data_list));
 
             }
@@ -141,14 +140,7 @@ public class AddPlaceFragment extends Fragment {
     }
 
     public void dismiss() {
-
         fragmentListener.dismiss(this);
-
-
-//        getActivity().getSupportFragmentManager()
-//                .beginTransaction()
-//                .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
-//                .remove(this).commit();
     }
 
     @Override
@@ -156,4 +148,19 @@ public class AddPlaceFragment extends Fragment {
         super.onDetach();
         fragmentListener = null;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("ADD FRAGMENT", "WYWOLALLO SIE ON RESUME");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("ADD FRAGMENT", "WYWOLALLO SIE ON PAUSE");
+
+    }
+
+
 }

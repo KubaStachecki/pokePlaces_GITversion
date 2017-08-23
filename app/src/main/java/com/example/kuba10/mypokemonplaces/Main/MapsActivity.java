@@ -8,7 +8,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,7 +20,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
@@ -45,10 +43,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
-import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -67,8 +62,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<PokePlace> placeList;
     private FirebaseDatabase fDatabase;
     private DatabaseReference placesRef;
-    private RetrofitConnection retrofitConnection;
     ArrayList<PokemonGo> pokemonGo_data_list;
+    private RetrofitConnection restDownload;
 
 
     @BindView(R.id.coordinator)
@@ -81,7 +76,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ImageView pikatchuSplash;
     @BindView(R.id.fab2)
     FloatingActionButton fab2;
-    private RetrofitConnection restDownload;
 
 
     @Override
@@ -118,7 +112,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getLocation();
                 if (latitude != 0 && longitude != 0) {
                     LatLng current = new LatLng(latitude, longitude);
-                    openFragment(AddPlaceFragment.newInstance(current, pokemonGo_data_list));
+                    openTaggedFragment(AddPlaceFragment.newInstance(current, pokemonGo_data_list));
 
                 } else {
                     showSnackbar(getString(R.string.unavaliable));
@@ -333,6 +327,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    public void openTaggedFragment(Fragment fragment) {
+
+        fragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
+                .add(R.id.fragmentFrame, fragment, "AddFragment")
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+
     private boolean checkPermissions() {
 
         if (ActivityCompat.checkSelfPermission(this,
@@ -419,6 +425,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
                 .remove(fragment).commit();
+    }
+
+
+    public void sendDataToFragment(Bundle pokemon){
+
+        this.getSupportFragmentManager().findFragmentByTag("AddFragment").setArguments(pokemon);
+
     }
 
 }

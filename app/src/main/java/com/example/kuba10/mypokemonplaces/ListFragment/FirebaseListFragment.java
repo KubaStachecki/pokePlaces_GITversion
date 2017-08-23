@@ -33,7 +33,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     private AdapterForTouchAndFirebase mFirebaseAdapter;
     private ItemTouchHelper mItemTouchHelper;
-
     private FragmentListener fragmentListener;
 
 
@@ -116,7 +115,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
-
                 .remove(this).commit();
     }
 
@@ -133,6 +131,12 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         fragmentListener = null;
 
 
+    }
+
+   public void openDetails(Fragment fragment){
+
+
+        fragmentListener.openFragment(fragment);
     }
 
 

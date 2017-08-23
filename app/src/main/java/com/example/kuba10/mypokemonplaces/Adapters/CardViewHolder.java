@@ -42,7 +42,6 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         image = (ImageView) view.findViewById(R.id.card_image);
         dragHandle = (ImageView) view.findViewById(R.id.drag_handle);
         showLocation = (ImageView) view.findViewById(R.id.show_on_map_button);
-        image = (ImageView) view.findViewById(R.id.card_image);
         favouriteBtn = (ImageButton) view.findViewById(R.id.favourite_button);
         placeCardView = (CardView) view.findViewById(R.id.placeCardView);
 

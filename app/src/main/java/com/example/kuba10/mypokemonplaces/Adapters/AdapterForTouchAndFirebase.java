@@ -8,6 +8,7 @@ import android.view.View;
 import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
+import com.example.kuba10.mypokemonplaces.PlaceDetailsFragment.PlaceDetailsFragment;
 import com.example.kuba10.mypokemonplaces.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.ChildEventListener;
@@ -44,24 +45,26 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         parentFragment = fragment;
 
 
-
         this.ref = ref;
         mChildEventListener = this.ref.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 places.add(dataSnapshot.getValue(PokePlace.class));
-//                Log.d("CHILD ADD LIST SIZE : ", "" + places.size());
             }
+
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
+
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
+
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -96,27 +99,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
             @Override
             public void onClick(View view) {
 
-                switch (place.getFavourite()) {
-
-                    case 0:
-
-                        PokePlace place = places.get(position);
-                        place.setFavourite(1);
-                        DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
-                        child.setValue(place);
-
-                        viewHolder.favouriteBtn.setImageResource(R.drawable.ic_032_star);
-                        break;
-                    case 1:
-
-                        PokePlace place2 = places.get(position);
-                        place2.setFavourite(0);
-                        DatabaseReference child2 = ref.getRef().child(String.valueOf(place2.getGlobalID()));
-                        child2.setValue(place2);
-
-                        viewHolder.favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
-                        break;
-                }
+                changeFavourite(place, position, viewHolder);
             }
         });
 
@@ -139,6 +122,16 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
             public void onClick(View view) {
                 parentFragment.dismiss();
                 parentFragment.findPosition(place);
+            }
+        });
+
+        viewHolder.placeCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                showDetails(place);
+
             }
         });
     }
@@ -164,5 +157,42 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
             child.setValue(place);
         }
     }
+
+    public void showDetails(PokePlace place) {
+
+
+        PlaceDetailsFragment details = PlaceDetailsFragment.newInstance(place);
+        details.show(parentFragment.getFragmentManager(), "");
+
+
+    }
+
+    public void changeFavourite(PokePlace place, int position, CardViewHolder viewHolder){
+
+        switch (place.getFavourite()) {
+
+            case 0:
+
+                PokePlace place0 = places.get(position);
+                place.setFavourite(1);
+                DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
+                child.setValue(place);
+
+                viewHolder.favouriteBtn.setImageResource(R.drawable.ic_032_star);
+                break;
+
+            case 1:
+
+                PokePlace place2 = places.get(position);
+                place2.setFavourite(0);
+                DatabaseReference child2 = ref.getRef().child(String.valueOf(place2.getGlobalID()));
+                child2.setValue(place2);
+
+                viewHolder.favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
+                break;
+        }
+
+    }
+
 }
 

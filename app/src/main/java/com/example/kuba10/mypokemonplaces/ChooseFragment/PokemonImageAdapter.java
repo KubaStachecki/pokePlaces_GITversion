@@ -1,5 +1,6 @@
 package com.example.kuba10.mypokemonplaces.ChooseFragment;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -30,13 +31,18 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
 
     private Context context;
     private List<PokemonGo> pokemonGo_data_list;
+    private FragmentListener fragmentListener;
+    ChooseFragment fragment;
 
 
 
 
-    public PokemonImageAdapter(Context context, List<PokemonGo> data_list) {
+
+    public PokemonImageAdapter(Context context, List<PokemonGo> data_list, FragmentListener fragmentListener, ChooseFragment fragment) {
         this.context = context;
+        this.fragment = (ChooseFragment) fragment;
         this.pokemonGo_data_list = data_list;
+        this.fragmentListener = fragmentListener;
     }
 
 
@@ -90,7 +96,8 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
 
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("SelectedPokemon", pokemonGo_data_list.get(position));
-
+                fragmentListener.sendDataToFragment(bundle);
+                fragment.dismiss();
 
             }
         });
@@ -142,5 +149,13 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
             loader = (ProgressBar) itemView.findViewById(R.id.loader);
             imageContainer = (RelativeLayout) itemView.findViewById(R.id.image_container);
         }
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        context = null;
+        fragmentListener = null;
+
     }
 }

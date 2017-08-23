@@ -1,9 +1,13 @@
 package com.example.kuba10.mypokemonplaces.RESTutils;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.kuba10.mypokemonplaces.FragmentListener;
+import com.example.kuba10.mypokemonplaces.Main.MapsActivity;
+import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Model.Pokemon;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -19,11 +23,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class RetrofitConnection {
+public class RetrofitConnection  {
 
     private Retrofit retrofit;
     private PokeApiService pokeRetrofit;
     ArrayList<PokemonGo> pokemonList;
+
 
 
     public void downloadPokemonList() {

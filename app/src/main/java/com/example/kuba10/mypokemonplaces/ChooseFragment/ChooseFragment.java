@@ -87,7 +87,7 @@ public class ChooseFragment extends Fragment {
         recyclerView.setLayoutManager(gridManager);
 
 
-        pokeAdapter = new PokemonImageAdapter(getActivity(), pokemonGo_data_list);
+        pokeAdapter = new PokemonImageAdapter(getActivity(), pokemonGo_data_list, fragmentListener, this);
         recyclerView.setAdapter(pokeAdapter);
 
         pokeAdapter.notifyDataSetChanged();
@@ -102,6 +102,10 @@ public class ChooseFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         fragmentListener = null;
+    }
+
+    public void dismiss() {
+        fragmentListener.dismiss(this);
     }
 
 }
