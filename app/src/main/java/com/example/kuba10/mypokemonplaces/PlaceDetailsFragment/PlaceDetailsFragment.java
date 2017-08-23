@@ -87,14 +87,10 @@ public class PlaceDetailsFragment extends DialogFragment {
         description.setText(place.getDesctription());
 
         switch (place.getFavourite()) {
-
             case 0:
-
                 favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
                 break;
-
             case 1:
-
                 favouriteBtn.setImageResource(R.drawable.ic_032_star);
                 break;
 

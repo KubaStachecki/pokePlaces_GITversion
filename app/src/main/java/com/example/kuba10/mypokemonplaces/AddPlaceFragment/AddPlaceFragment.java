@@ -59,22 +59,14 @@ public class AddPlaceFragment extends Fragment {
         args.putParcelableArrayList(LIST, pokemonGo_data_list);
         fragment.setArguments(args);
         return fragment;
-
-
     }
-
-
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         fragmentListener = (FragmentListener) context;
         pokemonGo_data_list = getArguments().getParcelableArrayList(LIST);
-
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,17 +102,17 @@ public class AddPlaceFragment extends Fragment {
 
                     place.setGlobalID(id);
 
+                    fragmentListener.savePlace(place);
+                    place = null;
+
+                    dismiss();
+
                 }
 
-                fragmentListener.savePlace(place);
-                place = null;
 
-                dismiss();
             }
         });
-
         cancelButt.setOnClickListener(new View.OnClickListener()
-
         {
             @Override
             public void onClick(View view) {
@@ -134,8 +126,6 @@ public class AddPlaceFragment extends Fragment {
 
             }
         });
-
-
         return view;
     }
 
@@ -148,13 +138,11 @@ public class AddPlaceFragment extends Fragment {
         super.onDetach();
         fragmentListener = null;
     }
-
     @Override
     public void onResume() {
         super.onResume();
         Log.d("ADD FRAGMENT", "WYWOLALLO SIE ON RESUME");
     }
-
     @Override
     public void onPause() {
         super.onPause();

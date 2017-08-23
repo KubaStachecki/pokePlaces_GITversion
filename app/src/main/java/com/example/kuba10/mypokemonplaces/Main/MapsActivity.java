@@ -210,12 +210,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void placemarkers() {
+    public void placeMarkers() {
 
         mMap.clear();
+
         for (PokePlace place : placeList) {
 
             mMap.addMarker(new MarkerOptions()
+
                     .position(new LatLng(place.getLat(), place.getLong()))
                     .title(place.getTitle())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.pointer_mid)
@@ -278,7 +280,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     placeList.add(pokePlace);
                 }
                 Log.d("LISTA FIREBASE", "   " + placeList.size());
-                placemarkers();
+                placeMarkers();
 
             }
 

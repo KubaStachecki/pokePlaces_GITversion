@@ -34,7 +34,6 @@ public class ChooseFragment extends Fragment {
     private LinearLayout errorImage;
     private FragmentListener fragmentListener;
 
-
    private  ArrayList<PokemonGo> pokemonGo_data_list;
 
 

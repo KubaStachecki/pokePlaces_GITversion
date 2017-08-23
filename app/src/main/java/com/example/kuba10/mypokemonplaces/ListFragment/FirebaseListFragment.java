@@ -27,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class FirebaseListFragment extends Fragment implements OnStartDragListener {
+public class    FirebaseListFragment extends Fragment implements OnStartDragListener {
 
     private static final String TAG = FirebaseListFragment.class.getSimpleName();
 
