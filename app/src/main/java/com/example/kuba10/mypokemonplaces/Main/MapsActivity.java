@@ -27,6 +27,7 @@ import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Constants;
+import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.example.kuba10.mypokemonplaces.RESTutils.RetrofitConnection;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -67,6 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FirebaseDatabase fDatabase;
     private DatabaseReference placesRef;
     private RetrofitConnection retrofitConnection;
+    ArrayList<PokemonGo> pokemonGo_data_list;
 
 
     @BindView(R.id.coordinator)
@@ -79,6 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ImageView pikatchuSplash;
     @BindView(R.id.fab2)
     FloatingActionButton fab2;
+    private RetrofitConnection restDownload;
 
 
     @Override
@@ -90,9 +93,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ButterKnife.bind(this);
 
-        retrofitConnection = new RetrofitConnection();
-        retrofitConnection.downloadPokemonList();
 
+        restDownload = new RetrofitConnection();
+        restDownload.downloadPokemonList();
+        pokemonGo_data_list = restDownload.getPokemonList();
 
 
         setSplashScreen();
@@ -107,21 +111,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private void setFabListeners() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getLocation();
                 if (latitude != 0 && longitude != 0) {
                     LatLng current = new LatLng(latitude, longitude);
-                    openFragment(AddPlaceFragment.newInstance(current));
+                    openFragment(AddPlaceFragment.newInstance(current, pokemonGo_data_list));
 
                 } else {
                     showSnackbar(getString(R.string.unavaliable));
@@ -161,10 +150,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
                 if (checkPermissions()) {
-                    pikatchuSplash.setVisibility(View.GONE);}}
+                    pikatchuSplash.setVisibility(View.GONE);
+                }
+            }
 
-            },3000);
-        }
+        }, 3000);
+    }
 
 
     private void prepareObjects() {
@@ -217,7 +208,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onMapClick(LatLng position) {
 
-                openFragment(AddPlaceFragment.newInstance(position));
+                openFragment(AddPlaceFragment.newInstance(position, pokemonGo_data_list));
 
 
             }
@@ -310,7 +301,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void savePlace(PokePlace place) {
 
 
-
         placesRef.child(Long.toString(place.getGlobalID())).setValue(place, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -329,8 +319,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-
-
     }
 
     public void openFragment(Fragment fragment) {
@@ -343,6 +331,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .commit();
 
     }
+
 
     private boolean checkPermissions() {
 
@@ -423,5 +412,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    @Override
+    public void dismiss(Fragment fragment) {
+
+        this.getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
+                .remove(fragment).commit();
+    }
 
 }
+
+

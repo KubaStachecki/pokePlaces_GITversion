@@ -1,9 +1,5 @@
 package com.example.kuba10.mypokemonplaces.Model;
 
-/**
- * Created by Kuba10 on 14.08.2017.
- */
-
 
 import android.os.Parcel;
 import android.os.Parcelable;

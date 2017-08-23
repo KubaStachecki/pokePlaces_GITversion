@@ -5,18 +5,18 @@ import java.util.ArrayList;
 
 public class Pokemon  {
 
+    //TODO POJO from  pokeapi.co with classic pokemons to add more details - if time allows...
+
     private int id;
     private String name;
-    private ArrayList<Type> types;
     private int weight;
     private int height;
 
 
 
-    public Pokemon(int id, String name, ArrayList<Type> types, int weight, int height) {
+    public Pokemon(int id, String name,  int weight, int height) {
         this.id = id;
         this.name = name;
-        this.types = types;
         this.weight = weight;
         this.height = height;
     }
@@ -36,10 +36,6 @@ public class Pokemon  {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public ArrayList<Type> getTypes() {
-        return types;
     }
 
     public String getImageUrl() {

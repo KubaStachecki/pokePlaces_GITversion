@@ -31,11 +31,9 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     private static final String TAG = FirebaseListFragment.class.getSimpleName();
 
-    DatabaseReference databaseReference;
     private AdapterForTouchAndFirebase mFirebaseAdapter;
     private ItemTouchHelper mItemTouchHelper;
 
-    Context context;
     private FragmentListener fragmentListener;
 
 
@@ -52,8 +50,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getActivity();
-        fragmentListener = (FragmentListener) context;
+        fragmentListener = (FragmentListener) getActivity();
 
     }
 
@@ -63,9 +60,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, view);
 
-
-        //  Use if un-sorted list is required, and change "query" in mFirebaseAdapter
-//        prepareDatabaseInstance();
 
         prepareQuery();
         setUpFirebaseAdapter();
@@ -86,7 +80,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mFirebaseAdapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mFirebaseAdapter);
@@ -103,39 +97,17 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
                 .orderByChild(Constants.FIREBASE_QUERY_INDEX);
     }
 
-    private void prepareDatabaseInstance() {
-        databaseReference = FirebaseDatabase
-                .getInstance()
-                .getReference()
-                .child(Constants.PLACES);
-    }
-
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        context = null;
-
     }
 
     @Override
     public void onPause() {
 
         super.onPause();
-        cleanup();
-
-
-    }
-
-    public void cleanup() {
-
         mFirebaseAdapter.cleanup();
+
 
     }
 
@@ -154,6 +126,16 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
 
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fragmentListener = null;
+
+
+    }
+
+
 
 
 }

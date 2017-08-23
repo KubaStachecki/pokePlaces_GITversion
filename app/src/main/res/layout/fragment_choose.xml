@@ -1,18 +1,39 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/choose_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context="com.example.kuba10.mypokemonplaces.ChooseFragment.ChooseFragment">
 
-    <ImageView
-        android:id="@+id/error_image_gallery"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+    <LinearLayout
         android:layout_gravity="center"
-        android:src="@drawable/sad_pika" />
+        android:id="@+id/error_image_gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/sad_pika" />
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:id="@+id/textView"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="@string/dataError" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/choose_recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"

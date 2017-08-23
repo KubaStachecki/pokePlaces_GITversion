@@ -18,4 +18,6 @@ public interface FragmentListener {
 
     void openFragment(Fragment fragment);
 
+    void dismiss(Fragment fragment);
+
 }

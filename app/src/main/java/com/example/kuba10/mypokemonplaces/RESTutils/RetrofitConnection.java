@@ -23,7 +23,7 @@ public class RetrofitConnection {
 
     private Retrofit retrofit;
     private PokeApiService pokeRetrofit;
-    List<PokemonGo> pokemonList;
+    ArrayList<PokemonGo> pokemonList;
 
 
     public void downloadPokemonList() {
@@ -51,14 +51,6 @@ public class RetrofitConnection {
                     @Override
                     public void onNext(@io.reactivex.annotations.NonNull List<PokemonGo> pokemon) {
                         pokemonList.addAll(pokemon);
-                        Log.e("NEXT RETROFIT", "" + pokemonList.size());
-
-//                        Log.e("Pokemon", "" +pokemon.getName());
-//                        Log.e("Pokemon", "" +pokemon.getWeight());
-//                        Log.e("Pokemon", "" +pokemon.getId());
-//                        Log.e("Pokemon", "" +pokemon.getImg());
-//                        Log.e("Pokemon", "" +pokemon.getAvgSpawns());
-
 
                     }
 
@@ -70,17 +62,22 @@ public class RetrofitConnection {
 
                     @Override
                     public void onComplete() {
-                        Log.d("COMPLETE RETROFIT", "lista z retro sciagneita : " + pokemonList.size());
+                        Log.d("COMPLETE RETROFIT", "full list downloaded : " + pokemonList.size());
 
                         for (PokemonGo pokemon : pokemonList) {
 
-                            Log.e("Pokemon", "" + pokemon.getName());
-                            Log.e("Pokemon", "" + pokemon.getWeight());
-                            Log.e("Pokemon", "" + pokemon.getId());
-                            Log.e("Pokemon", "" + pokemon.getImg());
-                            Log.e("Pokemon", "" + pokemon.getAvgSpawns());}
+                            Log.d("Pokemon", "" + pokemon.getName());
+                            Log.d("Pokemon", "" + pokemon.getWeight());
+                            Log.d("Pokemon", "" + pokemon.getId());
+                            Log.d("Pokemon", "" + pokemon.getImg());
+                            Log.d("Pokemon", "" + pokemon.getAvgSpawns());}
+
+                        Log.e("LISTA POKEMONOW", "I just like to watch that log... :) ");
+
 
                     }
+
+
                 });
 
 
@@ -92,7 +89,7 @@ public class RetrofitConnection {
 
 
 
-    public List<PokemonGo> getPokemonList() {
+    public ArrayList<PokemonGo> getPokemonList() {
 
         return pokemonList;
     }

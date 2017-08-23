@@ -13,11 +13,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kuba10.mypokemonplaces.ChooseFragment.ChooseFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
+import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -28,6 +31,8 @@ import butterknife.ButterKnife;
  */
 public class AddPlaceFragment extends Fragment {
 
+    public static final String LIST = "list";
+    public static final String POSITION = "position";
     @BindView(R.id.pokemon_image_view)
     ImageView pokemonImageView;
 
@@ -44,12 +49,14 @@ public class AddPlaceFragment extends Fragment {
     Button cancelButt;
 
     private FragmentListener fragmentListener;
+    private ArrayList<PokemonGo> pokemonGo_data_list;
 
 
-    public static AddPlaceFragment newInstance(LatLng position) {
+    public static AddPlaceFragment newInstance(LatLng position, ArrayList<PokemonGo> pokemonGo_data_list) {
         AddPlaceFragment fragment = new AddPlaceFragment();
         Bundle args = new Bundle();
-        args.putParcelable("position", position);
+        args.putParcelable(POSITION, position);
+        args.putParcelableArrayList(LIST, pokemonGo_data_list);
         fragment.setArguments(args);
         return fragment;
 
@@ -62,6 +69,8 @@ public class AddPlaceFragment extends Fragment {
         super.onAttach(context);
 
         fragmentListener = (FragmentListener) context;
+        pokemonGo_data_list = getArguments().getParcelableArrayList(LIST);
+
     }
 
     @Override
@@ -75,15 +84,15 @@ public class AddPlaceFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                LatLng position = getArguments().getParcelable("position");
+                LatLng position = getArguments().getParcelable(POSITION);
                 double lat = position.latitude;
                 double lng = position.longitude;
 
                 PokePlace place = new PokePlace();
 
-                if (titleField.getText().toString().equals("")){
+                if (titleField.getText().toString().equals("")) {
                     fragmentListener.showSnackbar("Place must have a title");
-                }else {
+                } else {
 
                     place.setTitle(titleField.getText().toString());
                     place.setTitle(titleField.getText().toString());
@@ -103,44 +112,48 @@ public class AddPlaceFragment extends Fragment {
 
                 fragmentListener.savePlace(place);
                 place = null;
-                dismiss();
 
+                dismiss();
             }
-    });
+        });
 
         cancelButt.setOnClickListener(new View.OnClickListener()
 
-    {
-        @Override
-        public void onClick (View view){
-            dismiss();
-        }
-    });
+        {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
 
 
         pokemonImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-//                fragmentListener.openFragment(ChooseFragment.newInstance());
+                fragmentListener.openFragment(ChooseFragment.newInstance(pokemonGo_data_list));
 
             }
         });
 
 
-
-
-
         return view;
-}
+    }
 
-public void dismiss(){
+    public void dismiss() {
 
-    getActivity().getSupportFragmentManager()
-            .beginTransaction()
-            .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
-            .remove(this).commit();
-}
+        fragmentListener.dismiss(this);
 
 
+//        getActivity().getSupportFragmentManager()
+//                .beginTransaction()
+//                .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
+//                .remove(this).commit();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fragmentListener = null;
+    }
 }

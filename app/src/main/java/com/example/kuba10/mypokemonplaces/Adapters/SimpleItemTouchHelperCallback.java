@@ -1,11 +1,7 @@
 package com.example.kuba10.mypokemonplaces.Adapters;
 
-import android.graphics.Canvas;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-
-import com.example.kuba10.mypokemonplaces.ListFragment.ListFragment;
 
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {

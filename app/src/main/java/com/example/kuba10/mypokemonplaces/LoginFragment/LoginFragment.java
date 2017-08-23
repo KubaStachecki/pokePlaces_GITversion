@@ -9,13 +9,11 @@ import android.view.ViewGroup;
 
 import com.example.kuba10.mypokemonplaces.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class LoginFragment extends Fragment {
 
 
-    //TODO jesli starczy czasu...
+    //TODO separate database for every user - if time allows...
 
 
     public LoginFragment() {

@@ -1,13 +1,13 @@
 package com.example.kuba10.mypokemonplaces.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Kuba10 on 23.08.2017.
- */
 
-public class PokemonGo {
+public class PokemonGo implements Parcelable {
 
 
     @SerializedName("id")
@@ -48,7 +48,28 @@ public class PokemonGo {
     private String spawnTime;
 
 
+    protected PokemonGo(Parcel in) {
+        num = in.readString();
+        name = in.readString();
+        img = in.readString();
+        height = in.readString();
+        weight = in.readString();
+        candy = in.readString();
+        egg = in.readString();
+        spawnTime = in.readString();
+    }
 
+    public static final Creator<PokemonGo> CREATOR = new Creator<PokemonGo>() {
+        @Override
+        public PokemonGo createFromParcel(Parcel in) {
+            return new PokemonGo(in);
+        }
+
+        @Override
+        public PokemonGo[] newArray(int size) {
+            return new PokemonGo[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -149,5 +170,20 @@ public class PokemonGo {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(num);
+        parcel.writeString(name);
+        parcel.writeString(img);
+        parcel.writeString(height);
+        parcel.writeString(weight);
+        parcel.writeString(candy);
+        parcel.writeString(egg);
+        parcel.writeString(spawnTime);
+    }
 }
