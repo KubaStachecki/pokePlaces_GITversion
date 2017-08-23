@@ -1,4 +1,4 @@
-package com.example.kuba10.mypokemonplaces.Adapters;
+package com.example.kuba10.mypokemonplaces.ListFragmentAdapters;
 
 public interface ItemTouchHelperAdapter {
 

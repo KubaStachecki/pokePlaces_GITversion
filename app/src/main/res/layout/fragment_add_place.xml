@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:layout_margin="5dp"
-    android:backgroundTint="@color/addFragmentText"
     android:clickable="true"
     android:orientation="vertical"
     tools:context="com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment">
@@ -23,7 +22,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="16dp"
-        tools:context="com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment">
+       >
 
 
 

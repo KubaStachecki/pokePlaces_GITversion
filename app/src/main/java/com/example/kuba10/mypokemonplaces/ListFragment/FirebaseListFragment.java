@@ -1,25 +1,22 @@
 package com.example.kuba10.mypokemonplaces.ListFragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.kuba10.mypokemonplaces.Adapters.AdapterForTouchAndFirebase;
-import com.example.kuba10.mypokemonplaces.Adapters.CardViewHolder;
-import com.example.kuba10.mypokemonplaces.Adapters.OnStartDragListener;
-import com.example.kuba10.mypokemonplaces.Adapters.SimpleItemTouchHelperCallback;
+import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.AdapterForTouchAndFirebase;
+import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.CardViewHolder;
+import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.OnStartDragListener;
+import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.SimpleItemTouchHelperCallback;
 import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.R;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
