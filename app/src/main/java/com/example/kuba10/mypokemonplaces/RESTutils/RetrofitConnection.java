@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.kuba10.mypokemonplaces.Model.Pokemon;
+import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class RetrofitConnection {
 
     private Retrofit retrofit;
     private PokeApiService pokeRetrofit;
-    List<Pokemon> pokemonList;
+    List<PokemonGo> pokemonList;
 
 
 
@@ -33,7 +34,7 @@ public class RetrofitConnection {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("ownstar.pl/")
+                .baseUrl("http://www.ownstar.pl/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
@@ -49,14 +50,15 @@ public class RetrofitConnection {
                     }
 
                     @Override
-                    public void onNext(@io.reactivex.annotations.NonNull Pokemon pokemon) {
+                    public void onNext(@io.reactivex.annotations.NonNull PokemonGo pokemon) {
                         pokemonList.add(pokemon);
                         Log.e("NEXT RETROFIT", "" + pokemonList.size());
 
                         Log.e("Pokemon", "" +pokemon.getName());
-                        Log.e("Pokemon", "" +pokemon.getImageUrl());
                         Log.e("Pokemon", "" +pokemon.getWeight());
                         Log.e("Pokemon", "" +pokemon.getId());
+                        Log.e("Pokemon", "" +pokemon.getImg());
+                        Log.e("Pokemon", "" +pokemon.getAvgSpawns());
 
 
 
@@ -78,7 +80,7 @@ public class RetrofitConnection {
     }
 
 
-    public List<Pokemon> getPokemonList() {
+    public List<PokemonGo> getPokemonList() {
 
         return pokemonList;
     }
