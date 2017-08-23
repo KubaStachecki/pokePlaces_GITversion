@@ -28,6 +28,7 @@ import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.R;
+import com.example.kuba10.mypokemonplaces.RESTutils.RetrofitConnection;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -60,30 +61,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double latitude;
     private double longitude;
     private SupportMapFragment mapFragment;
-
-
     private MapsContract.Presenter mainPresenter;
     private FragmentManager fragmentManager;
-
-
     private ArrayList<PokePlace> placeList;
-
     private FirebaseDatabase fDatabase;
     private DatabaseReference placesRef;
+    private RetrofitConnection retrofitConnection;
 
 
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinatorLayout;
-
     @BindView(R.id.fragmentFrame)
     FrameLayout fragmentContainer;
-
     @BindView(R.id.fab)
     FloatingActionButton fab;
-
     @BindView(R.id.sad_pikatchu)
     ImageView pikatchuSplash;
-
     @BindView(R.id.fab2)
     FloatingActionButton fab2;
 
@@ -97,28 +90,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ButterKnife.bind(this);
 
+        retrofitConnection = new RetrofitConnection();
+        retrofitConnection.downloadPokemonList();
+
+
 
         setSplashScreen();
-
         prepareObjects();
-
         if (checkPermissions()) {
             initView();
         } else {
             requestPermission();
         }
-
         setFabListeners();
 
-
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     private void setFabListeners() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 getLocation();
                 if (latitude != 0 && longitude != 0) {
                     LatLng current = new LatLng(latitude, longitude);
@@ -127,8 +134,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 } else {
                     showSnackbar(getString(R.string.unavaliable));
                 }
-
-
             }
         });
 
@@ -377,13 +382,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onBackPressed() {
-
         super.onBackPressed();
-
-//        Log.d("TAAAG", "nacisneto back");
-//        FirebaseListFragment listFragment = (FirebaseListFragment) fragmentManager.findFragmentById(R.id.coordinator);
-//        listFragment.cleanup();
-
     }
 
 
