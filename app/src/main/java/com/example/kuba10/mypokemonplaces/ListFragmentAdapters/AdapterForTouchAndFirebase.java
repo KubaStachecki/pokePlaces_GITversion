@@ -30,7 +30,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     private final Query ref;
     private ChildEventListener mChildEventListener;
-    private ArrayList<PokePlace> places;
+//    private ArrayList<PokePlace> places;
     private ArrayList<PokemonGo> pokemonGo_data_list;
     private FirebaseListFragment parentFragment;
     private OnStartDragListener mOnStartDragListener;
@@ -51,19 +51,26 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         mChildEventListener = ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                places.add(dataSnapshot.getValue(PokePlace.class));}
+                places.add(dataSnapshot.getValue(PokePlace.class));
+            }
+
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                parentFragment.refreshList();
+//                parentFragment.refreshList();
             }
+
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                parentFragment.refreshList();
+//                parentFragment.refreshList();
             }
+
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
 
 
@@ -71,24 +78,19 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
 
     @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
+    public void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(places, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-
-        return false;
     }
 
 
     @Override
     public void onItemDismiss(int position) {
-
         PokePlace place = places.get(position);
-        DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
-        child.removeValue();
+        DatabaseReference databasePlace = ref.getRef().child(String.valueOf(place.getGlobalID()));
+        databasePlace.removeValue();
         places.remove(position);
-
     }
-
 
     @Override
     protected void populateViewHolder(final CardViewHolder viewHolder, final PokePlace place, final int position) {
@@ -129,7 +131,8 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
             if (place.getPokemonId() == -777) {
                 viewHolder.image.setImageResource(R.drawable.ic_034_pikachu_1);
             } else {
-                setPokemonImage(place, viewHolder.image);}
+                setPokemonImage(place, viewHolder.image);
+            }
         } else {
             viewHolder.image.setImageResource(R.drawable.sad_pika);
         }

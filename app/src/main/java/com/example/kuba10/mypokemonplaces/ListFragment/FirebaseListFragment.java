@@ -145,9 +145,9 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     public void refreshList() {
 
-        mFirebaseAdapter.
         recyclerView.invalidate();
         recyclerView.getRecycledViewPool().clear();
+        mFirebaseAdapter.notifyDataSetChanged();
 
     }
 
