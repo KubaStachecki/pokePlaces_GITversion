@@ -38,11 +38,12 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
 
 
 
-    public PokemonImageAdapter(Context context, List<PokemonGo> data_list, FragmentListener fragmentListener, ChooseFragment fragment) {
+    public PokemonImageAdapter(Context context, FragmentListener fragmentListener, ChooseFragment fragment) {
         this.context = context;
         this.fragment = (ChooseFragment) fragment;
-        this.pokemonGo_data_list = data_list;
         this.fragmentListener = fragmentListener;
+        pokemonGo_data_list = fragmentListener.getPokemonList();
+
     }
 
 
@@ -50,6 +51,10 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
     public PokemonImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.choose_image_card, parent, false);
+
+
+
+
         return new ViewHolder(view);
 
     }
@@ -70,22 +75,25 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
         final ProgressBar progressView = holder.loader;
 
 
-        Picasso.with(context)
-                .load(pokemonGo_data_list.get(position).getImg())
-                .resize((getScreenWidth() / 4) - 20, (getScreenWidth() / 4) - 20)
-                .centerCrop()
 
-                .into(holder.imageView, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        progressView.setVisibility(View.GONE);
-                    }
+            Picasso.with(context)
+                    .load(pokemonGo_data_list.get(position).getImg())
+                    .resize((getScreenWidth() / 4) - 20, (getScreenWidth() / 4) - 20)
+                    .centerCrop()
 
-                    @Override
-                    public void onError() {
+                    .into(holder.imageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            progressView.setVisibility(View.GONE);
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+
+
 
 
 

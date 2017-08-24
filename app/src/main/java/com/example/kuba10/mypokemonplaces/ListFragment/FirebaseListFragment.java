@@ -29,17 +29,16 @@ import butterknife.ButterKnife;
 
 public class FirebaseListFragment extends Fragment implements OnStartDragListener {
 
-    private static final String TAG = FirebaseListFragment.class.getSimpleName();
 
     private AdapterForTouchAndFirebase mFirebaseAdapter;
     private ItemTouchHelper mItemTouchHelper;
     private FragmentListener fragmentListener;
+    private Query orderByChild;
 
 
     @BindView(R.id.listRecycler)
     RecyclerView recyclerView;
 
-    private Query orderByChild;
 
 
     public static FirebaseListFragment newInstance() {
@@ -136,8 +135,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     }
 
     public void openDetails(Fragment fragment) {
-
-
         fragmentListener.openFragment(fragment);
     }
 

@@ -26,7 +26,6 @@ import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Constants;
-import com.example.kuba10.mypokemonplaces.Model.Pokemon;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.example.kuba10.mypokemonplaces.RESTutils.RetrofitConnection;
@@ -61,7 +60,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double latitude;
     private double longitude;
     private SupportMapFragment mapFragment;
-    private MapsContract.Presenter mainPresenter;
     private FragmentManager fragmentManager;
     private ArrayList<PokePlace> placeList;
     private FirebaseDatabase fDatabase;
@@ -79,7 +77,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FloatingActionButton fab;
     @BindView(R.id.sad_pikatchu)
     ImageView pikatchuSplash;
-
     @BindView(R.id.fab2)
     FloatingActionButton fab2;
 
@@ -91,25 +88,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setRequestedOrientation(ActivityInfo
                 .SCREEN_ORIENTATION_PORTRAIT);
 
+        prepareRESTpokemonData();
+
         ButterKnife.bind(this);
-
-
-        restDownload = new RetrofitConnection();
-        restDownload.downloadPokemonList();
-        pokemonGo_data_list = restDownload.getPokemonList();
+        placeList = new ArrayList<>();
 
 
         setSplashScreen();
-        prepareObjects();
+        prepareMapandFragmentManager();
         if (checkPermissions()) {
             initView();
         } else {
             requestPermission();
         }
+
+
         setFabListeners();
 
     }
 
+    private void prepareRESTpokemonData() {
+        restDownload = new RetrofitConnection();
+        restDownload.downloadPokemonList();
+        pokemonGo_data_list = restDownload.getPokemonList();
+    }
 
     private void setFabListeners() {
         fab.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +121,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (latitude != 0 && longitude != 0) {
                     LatLng current = new LatLng(latitude, longitude);
 
-                    openTaggedFragment(AddPlaceFragment.newInstance(current, pokemonGo_data_list), Constants.ADD_FRAGMENT_TAG);
+                    openTaggedFragment(AddPlaceFragment.newInstance(current), Constants.ADD_FRAGMENT_TAG);
 
                 } else {
                     showSnackbar(getString(R.string.unavaliable));
@@ -158,16 +160,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }, 3000);
     }
 
-
-    private void prepareObjects() {
+    private void prepareMapandFragmentManager() {
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(map);
         mapFragment.getView().setVisibility(View.INVISIBLE);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mainPresenter = new MapsPresenter(this);
         fragmentManager = this.getSupportFragmentManager();
-        placeList = new ArrayList<>();
     }
 
     private void initView() {
@@ -187,7 +186,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fDatabase = FirebaseDatabase.getInstance();
         placesRef = fDatabase.getReference().child(Constants.PLACES);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -209,13 +207,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onMapClick(LatLng position) {
 
-                openTaggedFragment(AddPlaceFragment.newInstance(position, pokemonGo_data_list),Constants.ADD_FRAGMENT_TAG);
+                openTaggedFragment(AddPlaceFragment.newInstance(position), Constants.ADD_FRAGMENT_TAG);
 
 
             }
         });
     }
-
 
     public void placeMarkers() {
 
@@ -232,7 +229,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-
 
     public void getLocation() {
 
@@ -274,7 +270,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setAction("Action", null).show();
     }
 
-
     public void getPlacesList() {
 
         placesRef.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
@@ -299,7 +294,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-
 
     public void savePlace(PokePlace place) {
 
@@ -335,7 +329,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
     public void openTaggedFragment(Fragment fragment, String tag) {
 
         fragmentManager
@@ -346,7 +339,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .commit();
 
     }
-
 
     private boolean checkPermissions() {
 
@@ -359,6 +351,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_GPS_PERMISSION);
+        }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -378,18 +375,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-
-    private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_GPS_PERMISSION);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
 
     public void findPlaceFromList(PokePlace place) {
 
@@ -435,7 +420,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .remove(fragment).commit();
     }
 
-
     public void sendDataToAddFragment(PokemonGo pokemon) {
 
         AddPlaceFragment fragment = (AddPlaceFragment) this.getSupportFragmentManager().findFragmentByTag(Constants.ADD_FRAGMENT_TAG);
@@ -444,11 +428,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
-
     public ArrayList<PokemonGo> getPokemonList() {
 
-        return pokemonGo_data_list;
+        if (pokemonGo_data_list == null) {
+            restDownload.downloadPokemonList();
+            ArrayList<PokemonGo> cleanList = new ArrayList<PokemonGo>();
+            return cleanList;
+        }
+        return restDownload.getPokemonList();
     }
 
 }

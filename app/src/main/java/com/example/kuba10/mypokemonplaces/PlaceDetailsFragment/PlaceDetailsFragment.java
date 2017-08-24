@@ -31,10 +31,9 @@ public class PlaceDetailsFragment extends DialogFragment {
     public ImageView image, showLocation;
     public ImageButton favouriteBtn;
     private PokePlace place;
-    private ArrayList<PokemonGo> pokemons;
-
+    private ArrayList<PokemonGo> pokemonGo_data_list;
     private FirebaseListFragment parentFragment;
-    Query query;
+    private Query query;
 
     public static PlaceDetailsFragment newInstance(PokePlace place) {
 
@@ -78,7 +77,7 @@ public class PlaceDetailsFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_place_details, container, false);
 
-        pokemons = parentFragment.sendPokemonListToAdapter();
+        pokemonGo_data_list = parentFragment.sendPokemonListToAdapter();
 
         title = (TextView) view.findViewById(R.id.details_title);
         description = (TextView) view.findViewById(R.id.details_description);
@@ -103,15 +102,24 @@ public class PlaceDetailsFragment extends DialogFragment {
 
         }
 
+        if (pokemonGo_data_list.size() > 0) {
 
-        if (place.getPokemonId() == -777) {
+            if (place.getPokemonId() == -777) {
 
-            image.setImageResource(R.drawable.ic_034_pikachu_1);
+                image.setImageResource(R.drawable.ic_034_pikachu_1);
+
+            } else {
+
+                setPokemonImage(place, image);
+            }
+
 
         } else {
 
-            setPokemonImage(place, image);
+            image.setImageResource(R.drawable.sad_pika);
         }
+
+
 
 
         favouriteBtn.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +175,7 @@ public class PlaceDetailsFragment extends DialogFragment {
 
     private void setPokemonImage(PokePlace place, ImageView image) {
         Picasso.with(parentFragment.getContext())
-                .load(pokemons.get(place.getPokemonId()).getImg())
+                .load(pokemonGo_data_list.get(place.getPokemonId()).getImg())
                 .into(image);
     }
 

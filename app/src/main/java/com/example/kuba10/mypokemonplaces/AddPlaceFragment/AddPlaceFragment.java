@@ -34,6 +34,10 @@ import butterknife.ButterKnife;
 
 public class AddPlaceFragment extends Fragment {
 
+    private FragmentListener fragmentListener;
+    private ArrayList<PokemonGo> pokemonGo_data_list;
+    private PokemonGo pokemon;
+
 
     @BindView(R.id.pokemon_image_view)
     ImageView pokemonImageView;
@@ -50,16 +54,13 @@ public class AddPlaceFragment extends Fragment {
     @BindView(R.id.cancel_button)
     Button cancelButt;
 
-    private FragmentListener fragmentListener;
-    private ArrayList<PokemonGo> pokemonGo_data_list;
-    private PokemonGo pokemon;
 
 
-    public static AddPlaceFragment newInstance(LatLng position, ArrayList<PokemonGo> pokemonGo_data_list) {
+
+    public static AddPlaceFragment newInstance(LatLng position) {
         AddPlaceFragment fragment = new AddPlaceFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.POSITION, position);
-        args.putParcelableArrayList(Constants.LIST, pokemonGo_data_list);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,7 +71,7 @@ public class AddPlaceFragment extends Fragment {
         super.onAttach(context);
 
         fragmentListener = (FragmentListener) context;
-        pokemonGo_data_list = getArguments().getParcelableArrayList(Constants.LIST);
+        pokemonGo_data_list = fragmentListener.getPokemonList();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -152,11 +153,7 @@ public class AddPlaceFragment extends Fragment {
         fragmentListener.dismiss(this);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        fragmentListener = null;
-    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -171,6 +168,8 @@ public class AddPlaceFragment extends Fragment {
 
         this.pokemon = pokemon;
         setPokemonImage();
+        titleField.setText(pokemon.getName());
+        descriptionField.setText("Average spawn rate of this pokemon here will be: " + pokemon.getAvgSpawns().toString());
 
 
 
@@ -178,6 +177,10 @@ public class AddPlaceFragment extends Fragment {
     }
 
 
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fragmentListener = null;
+    }
 
 }

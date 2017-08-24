@@ -23,9 +23,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class RetrofitConnection  {
+public class RetrofitConnection {
 
     private Retrofit retrofit;
+    FragmentListener fragmentListener;
     private PokeApiService pokeRetrofit;
     ArrayList<PokemonGo> pokemonList;
 
@@ -33,9 +34,7 @@ public class RetrofitConnection  {
 
     public void downloadPokemonList() {
 
-
         pokemonList = new ArrayList<>();
-
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://www.ownstar.pl/")
@@ -75,7 +74,8 @@ public class RetrofitConnection  {
                             Log.d("Pokemon", "" + pokemon.getWeight());
                             Log.d("Pokemon", "" + pokemon.getId());
                             Log.d("Pokemon", "" + pokemon.getImg());
-                            Log.d("Pokemon", "" + pokemon.getAvgSpawns());}
+                            Log.d("Pokemon", "" + pokemon.getAvgSpawns());
+                        }
 
                         Log.e("LISTA POKEMONOW", "I just like to watch that log... :) ");
 
@@ -86,12 +86,7 @@ public class RetrofitConnection  {
                 });
 
 
-
-
-        }
-
-
-
+    }
 
 
     public ArrayList<PokemonGo> getPokemonList() {

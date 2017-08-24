@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
     private final Query ref;
     private ChildEventListener mChildEventListener;
     private ArrayList<PokePlace> places;
-    private ArrayList<PokemonGo> pokemons;
+    private ArrayList<PokemonGo> pokemonGo_data_list;
     private FirebaseListFragment parentFragment;
     private OnStartDragListener mOnStartDragListener;
 
@@ -45,7 +46,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         mOnStartDragListener = onStartDragListener;
         places = new ArrayList<>();
         parentFragment = fragment;
-        pokemons = parentFragment.sendPokemonListToAdapter();
+        pokemonGo_data_list = parentFragment.sendPokemonListToAdapter();
 
         mChildEventListener = ref.addChildEventListener(new ChildEventListener() {
 
@@ -131,21 +132,29 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
             }
         });
 
-        if (place.getPokemonId() == -777) {
+        if (pokemonGo_data_list.size() > 0) {
 
-            viewHolder.image.setImageResource(R.drawable.ic_034_pikachu_1);
+            if (place.getPokemonId() == -777) {
+
+                viewHolder.image.setImageResource(R.drawable.ic_034_pikachu_1);
+
+            } else {
+
+                setPokemonImage(place, viewHolder.image);
+            }
+
 
         } else {
-
-            setPokemonImage(place, viewHolder.image);
+            viewHolder.image.setImageResource(R.drawable.sad_pika);
         }
+
 
     }
 
 
     private void setPokemonImage(PokePlace place, ImageView image) {
         Picasso.with(parentFragment.getContext())
-                .load(pokemons.get(place.getPokemonId()).getImg())
+                .load(pokemonGo_data_list.get(place.getPokemonId()).getImg())
                 .into(image);
     }
 
