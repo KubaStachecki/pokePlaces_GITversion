@@ -85,8 +85,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_container);
-        setRequestedOrientation(ActivityInfo
-                .SCREEN_ORIENTATION_PORTRAIT);
+//        setRequestedOrientation(ActivityInfo
+//                .SCREEN_ORIENTATION_PORTRAIT);
 
         prepareRESTpokemonData();
 

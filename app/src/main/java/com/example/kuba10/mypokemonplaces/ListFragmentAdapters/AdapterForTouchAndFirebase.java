@@ -89,7 +89,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     @Override
     public void onItemDismiss(int position) {
-
+        setIndexInFirebase();
         PokePlace place = places.get(position);
         DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
         child.removeValue();
