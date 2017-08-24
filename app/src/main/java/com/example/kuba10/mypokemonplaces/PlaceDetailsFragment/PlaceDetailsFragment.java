@@ -125,8 +125,6 @@ public class PlaceDetailsFragment extends DialogFragment {
         favouriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 switch (place.getFavourite()) {
 
                     case 0:
@@ -154,6 +152,8 @@ public class PlaceDetailsFragment extends DialogFragment {
                         });
                         break;
                 }
+
+                parentFragment.refreshList();
 
             }
         });

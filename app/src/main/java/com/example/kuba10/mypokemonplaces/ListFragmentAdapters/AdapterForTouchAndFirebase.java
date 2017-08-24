@@ -49,30 +49,21 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         pokemonGo_data_list = parentFragment.sendPokemonListToAdapter();
 
         mChildEventListener = ref.addChildEventListener(new ChildEventListener() {
-
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                places.add(dataSnapshot.getValue(PokePlace.class));
-
-            }
-
+                places.add(dataSnapshot.getValue(PokePlace.class));}
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                parentFragment.refreshList();
             }
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                parentFragment.refreshList();
             }
-
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
 
@@ -83,18 +74,18 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(places, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
+
         return false;
     }
 
 
     @Override
     public void onItemDismiss(int position) {
-        setIndexInFirebase();
+
         PokePlace place = places.get(position);
         DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
         child.removeValue();
         places.remove(position);
-        notifyItemRangeChanged(position, places.size());
 
     }
 
@@ -136,22 +127,13 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         if (pokemonGo_data_list.size() > 0) {
 
             if (place.getPokemonId() == -777) {
-
                 viewHolder.image.setImageResource(R.drawable.ic_034_pikachu_1);
-
             } else {
-
-                setPokemonImage(place, viewHolder.image);
-            }
-
-
+                setPokemonImage(place, viewHolder.image);}
         } else {
             viewHolder.image.setImageResource(R.drawable.sad_pika);
         }
-
-
     }
-
 
     private void setPokemonImage(PokePlace place, ImageView image) {
         Picasso.with(parentFragment.getContext())

@@ -145,7 +145,9 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     public void refreshList() {
 
+        mFirebaseAdapter.
         recyclerView.invalidate();
+        recyclerView.getRecycledViewPool().clear();
 
     }
 
@@ -153,6 +155,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
         return fragmentListener.getPokemonList();
     }
+
 
 
 }

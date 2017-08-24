@@ -85,14 +85,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_container);
-//        setRequestedOrientation(ActivityInfo
-//                .SCREEN_ORIENTATION_PORTRAIT);
+
 
         prepareRESTpokemonData();
-
-        ButterKnife.bind(this);
         placeList = new ArrayList<>();
 
+        ButterKnife.bind(this);
 
         setSplashScreen();
         prepareMapandFragmentManager();
@@ -101,10 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             requestPermission();
         }
-
-
         setFabListeners();
-
     }
 
     private void prepareRESTpokemonData() {
@@ -271,7 +266,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void getPlacesList() {
-
         placesRef.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
 
             @Override
@@ -281,9 +275,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     PokePlace pokePlace = child.getValue(PokePlace.class);
                     placeList.add(pokePlace);
                 }
-                Log.d("LISTA FIREBASE", "   " + placeList.size());
                 placeMarkers();
-
             }
 
             @Override
@@ -301,21 +293,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         placesRef.child(Long.toString(place.getGlobalID())).setValue(place, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-
                 if (databaseError != null) {
-
                     showSnackbar("Error while saving :(");
-
                 } else {
-
                     showSnackbar("Place saved successfully.");
-                }
+               }
             }
-
-
         });
-
-
     }
 
     public void openFragment(Fragment fragment) {
@@ -365,9 +349,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             initView();
             mapFragment.getView().setVisibility(View.VISIBLE);
-
         } else {
-
             pikatchuSplashSad.setImageResource(R.drawable.sad_pika);
             pikatchuSplashSad.setVisibility(View.VISIBLE);
             mapFragment.getView().setVisibility(View.INVISIBLE);
@@ -377,7 +359,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void findPlaceFromList(PokePlace place) {
-
         Double lat = place.getLat();
         Double lng = place.getLong();
         LatLng selectedPlace = new LatLng(lat, lng);
@@ -387,6 +368,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .bearing(0)
                 .tilt(80)
                 .build();
+
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
@@ -399,21 +381,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setBuildingsEnabled(true);
 
         try {
-
             boolean success = googleMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                             this, R.raw.style1));
-
             if (!success) {
-                showSnackbar("map style not loaded");
-            }
-        } catch (Resources.NotFoundException e) {
-        }
+                showSnackbar("map style not loaded");}
+        } catch (Resources.NotFoundException e) {}
+
     }
 
     @Override
     public void dismiss(Fragment fragment) {
-
         this.getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
@@ -422,10 +400,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void sendDataToAddFragment(PokemonGo pokemon) {
 
-        AddPlaceFragment fragment = (AddPlaceFragment) this.getSupportFragmentManager().findFragmentByTag(Constants.ADD_FRAGMENT_TAG);
+        AddPlaceFragment fragment = (AddPlaceFragment)
+                this.getSupportFragmentManager().findFragmentByTag(Constants.ADD_FRAGMENT_TAG);
         fragment.setPokemonId(pokemon);
-
-
     }
 
     public ArrayList<PokemonGo> getPokemonList() {
