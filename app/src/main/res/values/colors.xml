@@ -5,6 +5,7 @@
     <color name="addFragmentText">#2599db</color>
     <color name="colorAccent">#ffa200</color>
     <color name="background">#e5ffffff</color>
+    <color name="lightBlue">#92d8ff</color>
 
 
 </resources>

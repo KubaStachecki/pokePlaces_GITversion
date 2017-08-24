@@ -94,6 +94,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
         child.removeValue();
         places.remove(position);
+        notifyItemRangeChanged(position, places.size());
 
     }
 

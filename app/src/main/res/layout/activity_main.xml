@@ -8,52 +8,56 @@
     tools:context="com.example.kuba10.mypokemonplaces.Main.MapsActivity">
 
 
-    <!--<android.support.design.widget.AppBarLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:theme="@style/AppTheme.AppBarOverlay">-->
-
-    <!--<android.support.v7.widget.Toolbar-->
-    <!--android:id="@+id/toolbar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="?attr/actionBarSize"-->
-    <!--android:background="?attr/colorPrimary"-->
-    <!--app:popupTheme="@style/AppTheme.PopupOverlay" />-->
-
-    <!--</android.support.design.widget.AppBarLayout>-->
-
     <include layout="@layout/activity_maps" />
 
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:tooltipText="Current Position"
-
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@android:color/black"
-        android:src="@drawable/ic_049_pokeball"
+
+        android:alpha="0.8"
+        android:src="@drawable/ic_gps_fixed_black_24dp"
+        android:tooltipText="Current Position"
+        app:backgroundTint="@color/common_google_signin_btn_text_dark_default"
         app:fabSize="normal" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="@dimen/fab_margin"
+
+        android:alpha="0.5"
+        android:src="@drawable/ic_info_outline_black_24dp"
+        android:tooltipText="Current Position"
+        app:backgroundTint="@color/common_google_signin_btn_text_dark_default"
+        app:fabSize="mini" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab2"
-        android:tooltipText="Poke Places List"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@android:color/black"
-        android:src="@drawable/ic_049_pokeball_blue"
-        app:fabSize="normal" />
+        android:alpha="0.8"
+        android:src="@drawable/ic_list_black_24dp"
+        android:tooltipText="Poke Places List"
+        app:backgroundTint="@color/common_google_signin_btn_text_dark_default"
+        app:fabSize="normal"
+        app:rippleColor="@color/lightBlue" />
 
     <ImageView
         android:id="@+id/sad_pikatchu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="80dp"
         android:layout_gravity="center"
+        android:layout_margin="80dp"
         android:src="@drawable/sad_pika" />
 
 
