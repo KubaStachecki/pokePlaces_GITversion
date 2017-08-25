@@ -138,7 +138,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         fragmentListener.openFragment(fragment);
     }
 
-
     public Query getQuery() {
         return orderByChild;
     }

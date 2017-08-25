@@ -9,4 +9,5 @@
     <string name="unavaliable">Current position unavailable</string>
     <string name="dataError">Database error - check connection</string>
     <string name="noImages">Cant load images - no connection</string>
+    <string name="AverageSpawnText">Average spawn rate of this pokemon here will be: </string>
 </resources>

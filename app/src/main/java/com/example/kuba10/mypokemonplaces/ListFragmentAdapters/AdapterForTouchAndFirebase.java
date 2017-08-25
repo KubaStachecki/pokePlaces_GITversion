@@ -1,10 +1,12 @@
 package com.example.kuba10.mypokemonplaces.ListFragmentAdapters;
 
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
@@ -16,7 +18,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     private final Query ref;
     private ChildEventListener mChildEventListener;
-//    private ArrayList<PokePlace> places;
+    private ArrayList<PokePlace> userPlacesDataList;
     private ArrayList<PokemonGo> pokemonGo_data_list;
     private FirebaseListFragment parentFragment;
     private OnStartDragListener mOnStartDragListener;
@@ -44,24 +45,22 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         this.ref = ref;
 
         mOnStartDragListener = onStartDragListener;
-        places = new ArrayList<>();
+        userPlacesDataList = new ArrayList<>();
         parentFragment = fragment;
         pokemonGo_data_list = parentFragment.sendPokemonListToAdapter();
 
         mChildEventListener = ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                places.add(dataSnapshot.getValue(PokePlace.class));
+                userPlacesDataList.add(dataSnapshot.getValue(PokePlace.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//                parentFragment.refreshList();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                parentFragment.refreshList();
             }
 
             @Override
@@ -79,32 +78,60 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(places, fromPosition, toPosition);
+        Collections.swap(userPlacesDataList, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
     }
 
 
     @Override
     public void onItemDismiss(int position) {
-        PokePlace place = places.get(position);
+        PokePlace place = userPlacesDataList.get(position);
         DatabaseReference databasePlace = ref.getRef().child(String.valueOf(place.getGlobalID()));
         databasePlace.removeValue();
-        places.remove(position);
+        userPlacesDataList.remove(position);
     }
 
     @Override
     protected void populateViewHolder(final CardViewHolder viewHolder, final PokePlace place, final int position) {
 
         viewHolder.bindPokePlace(place);
+        viewHolder.dragHandle.setLongClickable(true);
+
+
 
         viewHolder.dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    mOnStartDragListener.onStartDrag(viewHolder);
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+
+                    case MotionEvent.ACTION_DOWN: {
+
+//                        mOnStartDragListener.onStartDrag(viewHolder);
+
+                        Log.d("TAG", "onTouch: FINGER DOWN");
+                        return true;
+
+                    }
+
+                    case MotionEvent.ACTION_UP: {
+
+                        Log.d("TAG", "onTouch: FINGER UP");
+
+                        return false;
+                    }
+
+                    case MotionEvent.ACTION_CANCEL:
+                    {
+
+                        Log.d("TAG", "onTouch: CANCEL ");
+
+                        return true;
+                    }
+
                 }
-                return false;
+return true;
             }
+
         });
 
 
@@ -121,6 +148,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         viewHolder.placeCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setIndexInFirebase();
                 showDetails(place);
 
             }
@@ -158,10 +186,10 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
 
     private void setIndexInFirebase() {
-        for (int i = 0; i < places.size(); i++) {
-            PokePlace place = places.get(i);
+        for (int i = 0; i < userPlacesDataList.size(); i++) {
+            PokePlace place = userPlacesDataList.get(i);
             DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));
-            child.child("listPosition").setValue(Integer.toString(i));
+            child.child(Constants.FIREBASE_QUERY_INDEX).setValue(Integer.toString(i));
         }
     }
 

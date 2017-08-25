@@ -9,12 +9,14 @@ public final class Constants {
     //sorting index for list position
 
     public static final String FIREBASE_QUERY_INDEX = "listPosition";
+    public static final String INDEX_NOT_SET = "list_index_not_set";
+
 
     //daatabase sub-name in firebase
 
     public static final String PLACES = "places";
 
-    //request code for location permissions,,,,
+    //request code for location permissions
 
 
     public static final int REQUEST_GPS_PERMISSION = 786;

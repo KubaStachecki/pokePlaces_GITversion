@@ -17,7 +17,6 @@ import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
@@ -30,7 +29,8 @@ public class PlaceDetailsFragment extends DialogFragment {
     private TextView title, description;
     public ImageView image, showLocation;
     public ImageButton favouriteBtn;
-    private PokePlace place;
+
+    private PokePlace userSelectedPlace;
     private ArrayList<PokemonGo> pokemonGo_data_list;
     private FirebaseListFragment parentFragment;
     private Query query;
@@ -56,7 +56,7 @@ public class PlaceDetailsFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 
-            place = getArguments().getParcelable(Constants.DETAIL_POKEMON);
+            userSelectedPlace = getArguments().getParcelable(Constants.DETAIL_POKEMON);
             parentFragment = (FirebaseListFragment) getFragmentManager().findFragmentByTag(Constants.LIST_FRAGMENT_TAG);
             query = parentFragment.getQuery();
         }
@@ -89,10 +89,10 @@ public class PlaceDetailsFragment extends DialogFragment {
         showLocation.setImageResource(R.drawable.ic_001_pointer);
 
 
-        title.setText(place.getTitle());
-        description.setText(place.getDesctription());
+        title.setText(userSelectedPlace.getTitle());
+        description.setText(userSelectedPlace.getDesctription());
 
-        switch (place.getFavourite()) {
+        switch (userSelectedPlace.getFavourite()) {
             case 0:
                 favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
                 break;
@@ -104,13 +104,13 @@ public class PlaceDetailsFragment extends DialogFragment {
 
         if (pokemonGo_data_list.size() > 0) {
 
-            if (place.getPokemonId() == -777) {
+            if (userSelectedPlace.getPokemonId() == -777) {
 
                 image.setImageResource(R.drawable.ic_034_pikachu_1);
 
             } else {
 
-                setPokemonImage(place, image);
+                setPokemonImage(userSelectedPlace, image);
             }
 
 
@@ -120,36 +120,24 @@ public class PlaceDetailsFragment extends DialogFragment {
         }
 
 
-
-
         favouriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (place.getFavourite()) {
+                switch (userSelectedPlace.getFavourite()) {
 
                     case 0:
-
-                        place.setFavourite(1);
-                        DatabaseReference child = query.getRef().child(String.valueOf(place.getGlobalID()));
-                        child.setValue(place, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                favouriteBtn.setImageResource(R.drawable.ic_032_star);
-
-                            }
-                        });
+                        userSelectedPlace.setFavourite(1);
+                        DatabaseReference child = query.getRef().child(String.valueOf(userSelectedPlace.getGlobalID()));
+                        child.setValue(userSelectedPlace);
+                        favouriteBtn.setImageResource(R.drawable.ic_032_star);
                         break;
 
                     case 1:
 
-                        place.setFavourite(0);
-                        DatabaseReference child1 = query.getRef().child(String.valueOf(place.getGlobalID()));
-                        child1.setValue(place, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
-                            }
-                        });
+                        userSelectedPlace.setFavourite(0);
+                        DatabaseReference child1 = query.getRef().child(String.valueOf(userSelectedPlace.getGlobalID()));
+                        child1.setValue(userSelectedPlace);
+                        favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
                         break;
                 }
 
@@ -165,7 +153,7 @@ public class PlaceDetailsFragment extends DialogFragment {
 
                 dismiss();
                 parentFragment.dismiss();
-                parentFragment.findPosition(place);
+                parentFragment.findPosition(userSelectedPlace);
 
             }
         });

@@ -36,26 +36,18 @@ public class AddPlaceFragment extends Fragment {
 
     private FragmentListener fragmentListener;
     private ArrayList<PokemonGo> pokemonGo_data_list;
-    private PokemonGo pokemon;
-
+    private PokemonGo selectedPokemon;
 
     @BindView(R.id.pokemon_image_view)
     ImageView pokemonImageView;
-
     @BindView(R.id.description_input)
     TextView descriptionField;
-
     @BindView(R.id.title_input)
     TextView titleField;
-
     @BindView(R.id.add_button)
     Button addButt;
-
     @BindView(R.id.cancel_button)
     Button cancelButt;
-
-
-
 
     public static AddPlaceFragment newInstance(LatLng position) {
         AddPlaceFragment fragment = new AddPlaceFragment();
@@ -101,19 +93,11 @@ public class AddPlaceFragment extends Fragment {
                     place.setDesctription(descriptionField.getText().toString());
                     place.setLong(lng);
                     place.setLat(lat);
-                    place.setListPosition("list_index_not_set");
+                    place.setListPosition(Constants.INDEX_NOT_SET);
                     place.setFavourite(0);
 
-                    if(pokemon == null) {
-                        place.setPokemonId(-777);
-
-
-                    }else{place.setPokemonId(pokemon.getId() -1);}
-
-                    Date date = new Date();
-                    Long id = date.getTime();
-
-                    place.setGlobalID(id);
+                    setSelectedPokemonId(place);
+                    setPlaceId(place);
 
                     fragmentListener.savePlace(place);
 
@@ -141,9 +125,22 @@ public class AddPlaceFragment extends Fragment {
         return view;
     }
 
+    private void setPlaceId(PokePlace place) {
+        Date date = new Date();
+        Long id = date.getTime();
+
+        place.setGlobalID(id);
+    }
+
+    private void setSelectedPokemonId(PokePlace place) {
+        if(selectedPokemon == null) {
+            place.setPokemonId(-777);
+        }else{place.setPokemonId(selectedPokemon.getId() -1);}
+    }
+
     private void setPokemonImage() {
         Picasso.with(getContext())
-                .load(pokemon.getImg())
+                .load(selectedPokemon.getImg())
                 .resize(100,100)
                 .centerCrop()
                 .into(pokemonImageView);
@@ -166,10 +163,10 @@ public class AddPlaceFragment extends Fragment {
 
     public void setPokemonId(PokemonGo pokemon){
 
-        this.pokemon = pokemon;
+        this.selectedPokemon = pokemon;
         setPokemonImage();
         titleField.setText(pokemon.getName());
-        descriptionField.setText("Average spawn rate of this pokemon here will be: " + pokemon.getAvgSpawns().toString());
+        descriptionField.setText(getResources().getString(R.string.AverageSpawnText) + pokemon.getAvgSpawns().toString());
 
 
 
