@@ -42,7 +42,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
 
         super(modelClass, modelLayout, viewHolderClass, ref);
-        this.ref = ref;
+        this.ref = ref;  
 
         mOnStartDragListener = onStartDragListener;
         userPlacesDataList = new ArrayList<>();
