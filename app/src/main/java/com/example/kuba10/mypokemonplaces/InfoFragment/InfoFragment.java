@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kuba10.mypokemonplaces.Constants;
-import com.example.kuba10.mypokemonplaces.Model.AppInfoText;
 import com.example.kuba10.mypokemonplaces.R;
 
 import butterknife.BindView;
@@ -20,22 +19,9 @@ import butterknife.BindView;
 
 public class InfoFragment extends DialogFragment {
 
-
-    @BindView(R.id.app_info_text)
-    TextView infoText;
-
-    @BindView(R.id.app_info_title)
-    TextView infoTitle;
-
-    private AppInfoText appAppInfoText;
-
-
-    //TODO separate database for every user - if time allows...
-
-
-    public static InfoFragment newInstance(Bundle bundle) {
+    public static InfoFragment newInstance() {
         InfoFragment fragment = new InfoFragment();
-        fragment.setArguments(bundle);
+
         return fragment;
     }
 
@@ -50,16 +36,8 @@ public class InfoFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_info, container, false);
-
-        appAppInfoText = getArguments().getParcelable(Constants.INFO);
-
-
-        infoText.setText(appAppInfoText.getText());
-        infoTitle.setText(appAppInfoText.getTitle());
-
 
         return view;
 

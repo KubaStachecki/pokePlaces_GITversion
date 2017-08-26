@@ -23,7 +23,6 @@ import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.InfoFragment.InfoFragment;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
-import com.example.kuba10.mypokemonplaces.Model.AppInfoText;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
@@ -68,7 +67,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<PokemonGo> pokemonGo_data_list;
     private RetrofitConnection restDownload;
     private ImageView pikatchuSplashSad;
-    private AppInfoText appInfoTextText;
 
 
     @BindView(R.id.coordinator)
@@ -142,10 +140,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
 
-                Bundle infoBundle = new Bundle();
-                infoBundle.putParcelable(Constants.INFO, appInfoTextText);
 
-                InfoFragment details = InfoFragment.newInstance(infoBundle);
+                InfoFragment details = InfoFragment.newInstance();
                 details.show(fragmentManager, "");
             }
         });
@@ -187,7 +183,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (checkPermissions()) {
             setupDatabase();
             getPlacesList();
-            getNotesList();
             getLocation();
         }
 
@@ -305,27 +300,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    public void getNotesList() {
-
-        notesDatabaseReference.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
-
-            @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-                for (com.google.firebase.database.DataSnapshot child : dataSnapshot.getChildren()) {
-                    AppInfoText appInfoText = child.getValue(AppInfoText.class);
-                    placesMarkersList.add(pokePlace);
-
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                showSnackbar(getString(R.string.dataError));
-
-            }
-        });
-    }
 
     public void savePlace(PokePlace place) {
 

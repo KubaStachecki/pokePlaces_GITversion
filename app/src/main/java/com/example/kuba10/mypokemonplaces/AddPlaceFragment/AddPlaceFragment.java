@@ -131,7 +131,8 @@ public class AddPlaceFragment extends Fragment {
     private void setSelectedPokemonId(PokePlace place) {
         if(selectedPokemon == null) {
             place.setPokemonId(-777);
-        }else{place.setPokemonId(selectedPokemon.getId() -1);}
+        }else{place.setPokemonId(selectedPokemon.getId() -1);
+        }
     }
 
     private void setPokemonImage() {
