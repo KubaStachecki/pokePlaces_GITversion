@@ -93,12 +93,12 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         DatabaseReference databasePlace = ref.getRef().child(String.valueOf(place.getGlobalID()));
         databasePlace.removeValue();
         userPlacesDataList.remove(position);
+
     }
 
     @Override
     public void clearView() {
         setIndexInFirebase();
-Log.d("CLEAR", "running save");
     }
 
     @Override
@@ -179,6 +179,7 @@ Log.d("CLEAR", "running save");
 
 
     private void setIndexInFirebase() {
+        Log.d("SET INDEX", "setIndexInFirebase: runinng");
         for (int i = 0; i < userPlacesDataList.size(); i++) {
             PokePlace place = userPlacesDataList.get(i);
             DatabaseReference child = ref.getRef().child(String.valueOf(place.getGlobalID()));

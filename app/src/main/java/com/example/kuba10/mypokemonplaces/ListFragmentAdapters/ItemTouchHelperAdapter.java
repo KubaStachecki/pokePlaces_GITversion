@@ -7,4 +7,6 @@ public interface ItemTouchHelperAdapter {
     void onItemDismiss(int position);
 
     void clearView();
+
+//    void onDrawOver();
 }

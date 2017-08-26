@@ -1,7 +1,10 @@
 package com.example.kuba10.mypokemonplaces.ListFragmentAdapters;
 
+import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+
+import java.util.List;
 
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
@@ -12,6 +15,8 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
     }
+
+
 
 
     @Override
@@ -57,4 +62,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
         mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
     }
+
+
 }
