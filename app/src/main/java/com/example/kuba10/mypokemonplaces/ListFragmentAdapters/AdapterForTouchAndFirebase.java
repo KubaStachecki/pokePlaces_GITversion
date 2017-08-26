@@ -2,6 +2,7 @@ package com.example.kuba10.mypokemonplaces.ListFragmentAdapters;
 
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +24,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static android.view.DragEvent.ACTION_DRAG_STARTED;
+
 /**
  * Created by Kuba10 on 20.08.2017.
  */
@@ -42,7 +45,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
 
         super(modelClass, modelLayout, viewHolderClass, ref);
-        this.ref = ref;  
+        this.ref = ref;
 
         mOnStartDragListener = onStartDragListener;
         userPlacesDataList = new ArrayList<>();
@@ -85,10 +88,17 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     @Override
     public void onItemDismiss(int position) {
+
         PokePlace place = userPlacesDataList.get(position);
         DatabaseReference databasePlace = ref.getRef().child(String.valueOf(place.getGlobalID()));
         databasePlace.removeValue();
         userPlacesDataList.remove(position);
+    }
+
+    @Override
+    public void clearView() {
+        setIndexInFirebase();
+Log.d("CLEAR", "running save");
     }
 
     @Override
@@ -98,39 +108,23 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         viewHolder.dragHandle.setLongClickable(true);
 
 
-
         viewHolder.dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
+                switch (motionEvent.getActionMasked()) {
 
                     case MotionEvent.ACTION_DOWN: {
 
-//                        mOnStartDragListener.onStartDrag(viewHolder);
+                        mOnStartDragListener.onStartDrag(viewHolder);
 
                         Log.d("TAG", "onTouch: FINGER DOWN");
-                        return true;
-
-                    }
-
-                    case MotionEvent.ACTION_UP: {
-
-                        Log.d("TAG", "onTouch: FINGER UP");
-
                         return false;
+
                     }
 
-                    case MotionEvent.ACTION_CANCEL:
-                    {
 
-                        Log.d("TAG", "onTouch: CANCEL ");
-
-                        return true;
-                    }
-
-                }
-return true;
             }
+                return false;}
 
         });
 
@@ -148,7 +142,6 @@ return true;
         viewHolder.placeCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setIndexInFirebase();
                 showDetails(place);
 
             }

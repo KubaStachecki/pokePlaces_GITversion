@@ -5,6 +5,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
+
     private final ItemTouchHelperAdapter mAdapter;
 
 
@@ -13,6 +14,11 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
 
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        mAdapter.clearView();
+    }
 
     @Override
     public boolean isLongPressDragEnabled() {
