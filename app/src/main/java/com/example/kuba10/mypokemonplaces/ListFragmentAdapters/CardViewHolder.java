@@ -23,15 +23,10 @@ public class CardViewHolder extends RecyclerView.ViewHolder {
     public ImageButton favouriteBtn;
 
     private View view;
-    private Context mContext;
-
 
     public CardViewHolder(View view) {
         super(view);
         this.view = view;
-
-        mContext = view.getContext();
-
     }
 
     public void bindPokePlace(PokePlace place) {
@@ -54,15 +49,12 @@ public class CardViewHolder extends RecyclerView.ViewHolder {
         switch (place.getFavourite()) {
 
             case 0:
-
                 favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
                 break;
 
             case 1:
-
                 favouriteBtn.setImageResource(R.drawable.ic_032_star);
                 break;
-
         }
 
 
