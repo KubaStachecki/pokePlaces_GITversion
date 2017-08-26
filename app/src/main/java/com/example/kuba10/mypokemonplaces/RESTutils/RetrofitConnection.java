@@ -2,7 +2,6 @@ package com.example.kuba10.mypokemonplaces.RESTutils;
 
 import android.util.Log;
 
-import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 

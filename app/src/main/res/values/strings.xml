@@ -6,9 +6,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sample_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus egestas ante eleifend, efficitur lectus at, euismod enim. </string>
     <string name="sample_title">Lorem ipsum dolor sit amet</string>
-    <string name="unavaliable">Current position unavailable</string>
+    <string name="unavaliable">Locating current position...</string>
     <string name="dataError">Database error - check connection</string>
-    <string name="noImages">Cant load images - no connection</string>
+    <string name="noImages">Can\'t load images - no connection</string>
     <string name="AverageSpawnText">Average spawn rate of this pokemon here is: </string>
     <string name="placeSavingError">Error while saving :(</string>
     <string name="saveSucess">Place saved successfully :)</string>
@@ -21,7 +21,7 @@
     It has map with location, that can be saved on list via button or map-click,
     it has real - time database to store saved location online,
     user can move and delete items on list via gestures - database keeps order information,
-     images avaliable on add-place screen are downloaded from REST API that is (almost) up to date and there is still a lot of bugs to fix.\n \n
+     images available on add-place screen are downloaded from REST API that is (almost) up to date and… there is still a lot of bugs to fix.\n \n
         But I hope you enjoy it as I did writing this little thing.\n \n
         Best Regards!
 

@@ -20,11 +20,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
+import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.InfoFragment.InfoFragment;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
-import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.example.kuba10.mypokemonplaces.RESTutils.RetrofitConnection;
@@ -53,7 +53,6 @@ import static com.example.kuba10.mypokemonplaces.R.id.map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, FragmentListener {
 
-
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
     private double latitude;
@@ -63,10 +62,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<PokePlace> placesMarkersList;
     private FirebaseDatabase fDatabase;
     private DatabaseReference placesDatabaseReference;
-    private DatabaseReference notesDatabaseReference;
     private ArrayList<PokemonGo> pokemonGo_data_list;
     private RetrofitConnection restDownload;
-    private ImageView pikatchuSplashSad;
 
 
     @BindView(R.id.coordinator)
@@ -75,33 +72,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FrameLayout fragmentContainer;
     @BindView(R.id.position_fab)
     FloatingActionButton position_fab;
-    @BindView(R.id.sad_pikatchu)
+    @BindView(R.id.pikatchu)
     ImageView pikatchuSplash;
     @BindView(R.id.list_fab)
     FloatingActionButton list_fab;
     @BindView(R.id.info_fab)
     FloatingActionButton info_fab;
+    @BindView(R.id.sad_pikatchu)
+    ImageView pikatchuNoGps;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_container);
+        ButterKnife.bind(this);
 
+        setSplashScreen();
 
         prepareRESTpokemonData();
         placesMarkersList = new ArrayList<>();
 
-        ButterKnife.bind(this);
-
-        setSplashScreen();
         prepareMapandFragmentManager();
+
         if (checkPermissions()) {
             initView();
         } else {
             requestPermission();
         }
         setFabListeners();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        mapFragment.getView().setVisibility(View.VISIBLE);
+
+        mMap = googleMap;
+        styleMap(googleMap);
+
+        if (checkPermissions()) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            showSnackbar(getString(R.string.unavaliable));
+        }
+
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng position) {
+
+                openTaggedFragment(AddPlaceFragment.newInstance(position), Constants.ADD_FRAGMENT_TAG);
+
+
+            }
+        });
     }
 
     private void prepareRESTpokemonData() {
@@ -149,12 +175,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void setSplashScreen() {
 
-        pikatchuSplash.setImageResource(R.drawable.pika);
+        pikatchuNoGps.setVisibility(View.GONE);
+        pikatchuSplash.setImageResource(R.drawable.splash_screen_pika);
         pikatchuSplash.setVisibility(View.VISIBLE);
-
-        pikatchuSplashSad = pikatchuSplash;
-        pikatchuSplashSad.setVisibility(View.INVISIBLE);
-        pikatchuSplashSad.setImageResource(R.drawable.sad_pika);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -164,7 +187,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
 
-        }, 3000);
+        }, 3500);
     }
 
     private void prepareMapandFragmentManager() {
@@ -192,34 +215,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setupDatabase() {
         fDatabase = FirebaseDatabase.getInstance();
         placesDatabaseReference = fDatabase.getReference().child(Constants.PLACES);
-        notesDatabaseReference = fDatabase.getReference().child(Constants.NOTES);
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-        mapFragment.getView().setVisibility(View.VISIBLE);
-
-        mMap = googleMap;
-        styleMap(googleMap);
-
-        if (checkPermissions()) {
-            mMap.setMyLocationEnabled(true);
-        } else {
-            showSnackbar(getString(R.string.unavaliable));
-        }
-
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng position) {
-
-                openTaggedFragment(AddPlaceFragment.newInstance(position), Constants.ADD_FRAGMENT_TAG);
-
-
-            }
-        });
     }
 
     public void placeMarkers() {
@@ -300,7 +295,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-
     public void savePlace(PokePlace place) {
 
 
@@ -365,7 +359,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mapFragment.getView().setVisibility(View.VISIBLE);
         } else {
 
-            pikatchuSplashSad.setVisibility(View.VISIBLE);
+            pikatchuNoGps.setVisibility(View.VISIBLE);
             mapFragment.getView().setVisibility(View.INVISIBLE);
             showSnackbar(getString(R.string.noGpsPermissions));
         }
@@ -397,7 +391,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             boolean success = googleMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.style1));
+                            this, R.raw.google_map_style_pokemon));
             if (!success) {
                 showSnackbar(getString(R.string.mapStyleError));
             }

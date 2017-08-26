@@ -78,7 +78,7 @@ public class PlaceDetailsFragment extends DialogFragment {
         favouriteBtn = (ImageButton) view.findViewById(R.id.details_favourite_button);
 
         image.setImageResource(R.drawable.ic_034_pikachu_1);
-        showLocation.setImageResource(R.drawable.ic_001_pointer);
+        showLocation.setImageResource(R.drawable.ic_021_pointer);
 
 
         title.setText(userSelectedPlace.getTitle());
@@ -94,6 +94,51 @@ public class PlaceDetailsFragment extends DialogFragment {
 
         }
 
+        setPokemonImage();
+
+
+        favouriteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (userSelectedPlace.getFavourite()) {
+
+                    case 0:
+                        setFavouriteImageAndDatabase(1,
+                                String.valueOf(userSelectedPlace.getGlobalID()), userSelectedPlace, R.drawable.ic_032_star);
+                        break;
+
+                    case 1:
+                        setFavouriteImageAndDatabase(0,
+                                String.valueOf(userSelectedPlace.getGlobalID()), userSelectedPlace, R.drawable.ic_032_star_empty);
+                        break;
+                }
+
+
+            }
+        });
+
+
+        showLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+                parentFragment.dismiss();
+                parentFragment.findPosition(userSelectedPlace);
+
+            }
+        });
+
+        return view;
+    }
+
+    private void setFavouriteImageAndDatabase(int favourite, String s, PokePlace userSelectedPlace, int ic_032_star) {
+        userSelectedPlace.setFavourite(favourite);
+        DatabaseReference child = query.getRef().child(s);
+        child.setValue(userSelectedPlace);
+        favouriteBtn.setImageResource(ic_032_star);
+    }
+
+    private void setPokemonImage() {
         if (pokemonGo_data_list.size() > 0) {
 
             if (userSelectedPlace.getPokemonId() == -777) {
@@ -110,46 +155,6 @@ public class PlaceDetailsFragment extends DialogFragment {
 
             image.setImageResource(R.drawable.sad_pika);
         }
-
-
-        favouriteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (userSelectedPlace.getFavourite()) {
-
-                    case 0:
-                        userSelectedPlace.setFavourite(1);
-                        DatabaseReference child = query.getRef().child(String.valueOf(userSelectedPlace.getGlobalID()));
-                        child.setValue(userSelectedPlace);
-                        favouriteBtn.setImageResource(R.drawable.ic_032_star);
-                        break;
-
-                    case 1:
-
-                        userSelectedPlace.setFavourite(0);
-                        DatabaseReference child1 = query.getRef().child(String.valueOf(userSelectedPlace.getGlobalID()));
-                        child1.setValue(userSelectedPlace);
-                        favouriteBtn.setImageResource(R.drawable.ic_032_star_empty);
-                        break;
-                }
-
-
-            }
-        });
-
-
-        showLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dismiss();
-                parentFragment.dismiss();
-                parentFragment.findPosition(userSelectedPlace);
-
-            }
-        });
-
-        return view;
     }
 
     private void setPokemonImage(PokePlace place, ImageView image) {

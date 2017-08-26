@@ -84,10 +84,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mFirebaseAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerView);
-
-        recyclerView.invalidate();
-
-
     }
 
     private void prepareQuery() {
@@ -130,7 +126,9 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     public void onDetach() {
         super.onDetach();
         fragmentListener = null;
-
+        orderByChild = null;
+        mItemTouchHelper = null;
+        mFirebaseAdapter = null;
 
     }
 
@@ -143,7 +141,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     }
 
     public ArrayList<PokemonGo> sendPokemonListToAdapter() {
-
         return fragmentListener.getPokemonList();
     }
 

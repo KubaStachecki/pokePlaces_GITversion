@@ -46,7 +46,7 @@ public class CardViewHolder extends RecyclerView.ViewHolder {
         placeCardView = (CardView) view.findViewById(R.id.placeCardView);
 
         dragHandle.setImageResource(R.drawable.ic_drag_handle_black_24dp);
-        showLocation.setImageResource(R.drawable.ic_001_pointer);
+        showLocation.setImageResource(R.drawable.ic_021_pointer);
 
         title.setText(place.getTitle());
         description.setText(place.getDesctription());

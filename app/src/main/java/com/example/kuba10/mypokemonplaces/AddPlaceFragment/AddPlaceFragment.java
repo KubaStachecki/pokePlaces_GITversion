@@ -3,10 +3,7 @@ package com.example.kuba10.mypokemonplaces.AddPlaceFragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +18,6 @@ import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.google.android.gms.maps.model.LatLng;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -145,11 +141,11 @@ public class AddPlaceFragment extends Fragment {
         fragmentListener.dismiss(this);
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
     }
+
     @Override
     public void onPause() {
         super.onPause();

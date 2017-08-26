@@ -9,12 +9,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.R;
-
-import butterknife.BindView;
 
 
 public class InfoFragment extends DialogFragment {
@@ -29,18 +25,14 @@ public class InfoFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         setFullScreenStyle();
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_info, container, false);
-
         return view;
-
     }
 
     private void setFullScreenStyle() {
