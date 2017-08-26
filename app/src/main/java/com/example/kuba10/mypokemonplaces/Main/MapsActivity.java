@@ -262,7 +262,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void showSnackbar(String text) {
 
         Snackbar.make(coordinatorLayout, text, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+                .show();
     }
 
     public void getPlacesList() {
@@ -280,7 +280,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("LISTA FIREBASE", "database connection error");
                 showSnackbar(getString(R.string.dataError));
 
             }
@@ -294,9 +293,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError != null) {
-                    showSnackbar("Error while saving :(");
+                    showSnackbar(getString(R.string.placeSavingError));
                 } else {
-                    showSnackbar("Place saved successfully.");
+                    showSnackbar(getString(R.string.saveSucess));
                }
             }
         });
@@ -353,7 +352,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             pikatchuSplashSad.setImageResource(R.drawable.sad_pika);
             pikatchuSplashSad.setVisibility(View.VISIBLE);
             mapFragment.getView().setVisibility(View.INVISIBLE);
-            showSnackbar("App will not work without GPS :(");
+            showSnackbar(getString(R.string.noGpsPermissions));
         }
 
     }
@@ -385,7 +384,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     MapStyleOptions.loadRawResourceStyle(
                             this, R.raw.style1));
             if (!success) {
-                showSnackbar("map style not loaded");}
+                showSnackbar(getString(R.string.mapStyleError));}
         } catch (Resources.NotFoundException e) {}
 
     }

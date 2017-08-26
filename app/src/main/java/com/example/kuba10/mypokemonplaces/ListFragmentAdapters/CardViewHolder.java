@@ -15,15 +15,15 @@ import com.example.kuba10.mypokemonplaces.R;
  * Created by Kuba10 on 20.08.2017.
  */
 
-public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class CardViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView title, description;
+    public TextView title, description;
     public ImageView image, dragHandle, showLocation;
     public CardView placeCardView;
     public ImageButton favouriteBtn;
 
-    View view;
-    Context mContext;
+    private View view;
+    private Context mContext;
 
 
     public CardViewHolder(View view) {
@@ -48,7 +48,6 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         dragHandle.setImageResource(R.drawable.ic_drag_handle_black_24dp);
         showLocation.setImageResource(R.drawable.ic_001_pointer);
 
-
         title.setText(place.getTitle());
         description.setText(place.getDesctription());
 
@@ -69,10 +68,7 @@ public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     }
 
-    @Override
-    public void onClick(View view) {
 
-    }
 
 
 }

@@ -141,7 +141,6 @@ public class PlaceDetailsFragment extends DialogFragment {
                         break;
                 }
 
-                parentFragment.refreshList();
 
             }
         });

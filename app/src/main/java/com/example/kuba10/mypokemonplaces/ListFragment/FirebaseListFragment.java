@@ -142,14 +142,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         return orderByChild;
     }
 
-    public void refreshList() {
-
-        recyclerView.invalidate();
-        recyclerView.getRecycledViewPool().clear();
-        mFirebaseAdapter.notifyDataSetChanged();
-
-    }
-
     public ArrayList<PokemonGo> sendPokemonListToAdapter() {
 
         return fragmentListener.getPokemonList();

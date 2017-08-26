@@ -10,4 +10,8 @@
     <string name="dataError">Database error - check connection</string>
     <string name="noImages">Cant load images - no connection</string>
     <string name="AverageSpawnText">Average spawn rate of this pokemon here will be: </string>
+    <string name="placeSavingError">Error while saving :(</string>
+    <string name="saveSucess">Place saved successfully :)</string>
+    <string name="noGpsPermissions">App will not work without GPS :(</string>
+    <string name="mapStyleError">map style not loaded</string>
 </resources>
