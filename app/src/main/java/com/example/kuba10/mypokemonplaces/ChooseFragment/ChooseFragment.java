@@ -9,19 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
-import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
 import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
-import com.example.kuba10.mypokemonplaces.Model.Pokemon;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
-import com.example.kuba10.mypokemonplaces.RESTutils.RetrofitConnection;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 

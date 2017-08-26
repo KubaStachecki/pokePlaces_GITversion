@@ -1,7 +1,6 @@
 package com.example.kuba10.mypokemonplaces.Main;
 
 import android.Manifest;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
@@ -16,14 +15,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
+import com.example.kuba10.mypokemonplaces.InfoFragment.InfoFragment;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
+import com.example.kuba10.mypokemonplaces.Model.AppInfoText;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
 
 import static com.example.kuba10.mypokemonplaces.R.id.map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, MapsContract.View, FragmentListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, FragmentListener {
 
 
     private GoogleMap mMap;
@@ -61,24 +61,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double longitude;
     private SupportMapFragment mapFragment;
     private FragmentManager fragmentManager;
-    private ArrayList<PokePlace> placeList;
+    private ArrayList<PokePlace> placesMarkersList;
     private FirebaseDatabase fDatabase;
-    private DatabaseReference placesRef;
+    private DatabaseReference placesDatabaseReference;
+    private DatabaseReference notesDatabaseReference;
     private ArrayList<PokemonGo> pokemonGo_data_list;
     private RetrofitConnection restDownload;
     private ImageView pikatchuSplashSad;
+    private AppInfoText appInfoTextText;
 
 
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.fragmentFrame)
     FrameLayout fragmentContainer;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+    @BindView(R.id.position_fab)
+    FloatingActionButton position_fab;
     @BindView(R.id.sad_pikatchu)
     ImageView pikatchuSplash;
-    @BindView(R.id.fab2)
-    FloatingActionButton fab2;
+    @BindView(R.id.list_fab)
+    FloatingActionButton list_fab;
+    @BindView(R.id.info_fab)
+    FloatingActionButton info_fab;
 
 
     @Override
@@ -88,7 +92,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         prepareRESTpokemonData();
-        placeList = new ArrayList<>();
+        placesMarkersList = new ArrayList<>();
 
         ButterKnife.bind(this);
 
@@ -109,40 +113,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void setFabListeners() {
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        position_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getLocation();
                 if (latitude != 0 && longitude != 0) {
                     LatLng current = new LatLng(latitude, longitude);
-
                     openTaggedFragment(AddPlaceFragment.newInstance(current), Constants.ADD_FRAGMENT_TAG);
-
                 } else {
                     showSnackbar(getString(R.string.unavaliable));
                 }
             }
         });
 
-        fab2.setOnClickListener(new View.OnClickListener()
+        list_fab.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View view) {
+                openTaggedFragment(FirebaseListFragment.newInstance(), Constants.LIST_FRAGMENT_TAG);
+            }
+        });
+
+        info_fab.setOnClickListener(new View.OnClickListener()
 
         {
             @Override
             public void onClick(View view) {
 
-                openTaggedFragment(FirebaseListFragment.newInstance(), Constants.LIST_FRAGMENT_TAG);
+                Bundle infoBundle = new Bundle();
+                infoBundle.putParcelable(Constants.INFO, appInfoTextText);
 
+                InfoFragment details = InfoFragment.newInstance(infoBundle);
+                details.show(fragmentManager, "");
             }
         });
     }
 
     private void setSplashScreen() {
 
-        pikatchuSplashSad = pikatchuSplash;
-        pikatchuSplashSad.setVisibility(View.INVISIBLE);
-
         pikatchuSplash.setImageResource(R.drawable.pika);
         pikatchuSplash.setVisibility(View.VISIBLE);
+
+        pikatchuSplashSad = pikatchuSplash;
+        pikatchuSplashSad.setVisibility(View.INVISIBLE);
+        pikatchuSplashSad.setImageResource(R.drawable.sad_pika);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -171,6 +187,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (checkPermissions()) {
             setupDatabase();
             getPlacesList();
+            getNotesList();
             getLocation();
         }
 
@@ -179,7 +196,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void setupDatabase() {
         fDatabase = FirebaseDatabase.getInstance();
-        placesRef = fDatabase.getReference().child(Constants.PLACES);
+        placesDatabaseReference = fDatabase.getReference().child(Constants.PLACES);
+        notesDatabaseReference = fDatabase.getReference().child(Constants.NOTES);
     }
 
     @Override
@@ -213,7 +231,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.clear();
 
-        for (PokePlace place : placeList) {
+        for (PokePlace place : placesMarkersList) {
 
             mMap.addMarker(new MarkerOptions()
 
@@ -266,16 +284,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void getPlacesList() {
-        placesRef.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+
+        placesDatabaseReference.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
 
             @Override
             public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
-                placeList.clear();
+                placesMarkersList.clear();
                 for (com.google.firebase.database.DataSnapshot child : dataSnapshot.getChildren()) {
                     PokePlace pokePlace = child.getValue(PokePlace.class);
-                    placeList.add(pokePlace);
+                    placesMarkersList.add(pokePlace);
                 }
                 placeMarkers();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                showSnackbar(getString(R.string.dataError));
+
+            }
+        });
+    }
+
+    public void getNotesList() {
+
+        notesDatabaseReference.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
+                for (com.google.firebase.database.DataSnapshot child : dataSnapshot.getChildren()) {
+                    AppInfoText appInfoText = child.getValue(AppInfoText.class);
+                    placesMarkersList.add(pokePlace);
+
+
+                }
             }
 
             @Override
@@ -289,14 +330,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void savePlace(PokePlace place) {
 
 
-        placesRef.child(Long.toString(place.getGlobalID())).setValue(place, new DatabaseReference.CompletionListener() {
+        placesDatabaseReference.child(Long.toString(place.getGlobalID())).setValue(place, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError != null) {
                     showSnackbar(getString(R.string.placeSavingError));
                 } else {
                     showSnackbar(getString(R.string.saveSucess));
-               }
+                }
             }
         });
     }
@@ -349,7 +390,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             initView();
             mapFragment.getView().setVisibility(View.VISIBLE);
         } else {
-            pikatchuSplashSad.setImageResource(R.drawable.sad_pika);
+
             pikatchuSplashSad.setVisibility(View.VISIBLE);
             mapFragment.getView().setVisibility(View.INVISIBLE);
             showSnackbar(getString(R.string.noGpsPermissions));
@@ -384,8 +425,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     MapStyleOptions.loadRawResourceStyle(
                             this, R.raw.style1));
             if (!success) {
-                showSnackbar(getString(R.string.mapStyleError));}
-        } catch (Resources.NotFoundException e) {}
+                showSnackbar(getString(R.string.mapStyleError));
+            }
+        } catch (Resources.NotFoundException e) {
+        }
 
     }
 
@@ -398,14 +441,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void sendDataToAddFragment(PokemonGo pokemon) {
-
         AddPlaceFragment fragment = (AddPlaceFragment)
                 this.getSupportFragmentManager().findFragmentByTag(Constants.ADD_FRAGMENT_TAG);
         fragment.setPokemonId(pokemon);
     }
 
     public ArrayList<PokemonGo> getPokemonList() {
-
         if (pokemonGo_data_list == null) {
             restDownload.downloadPokemonList();
             ArrayList<PokemonGo> cleanList = new ArrayList<PokemonGo>();

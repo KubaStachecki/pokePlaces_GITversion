@@ -8,9 +8,7 @@ import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 
 import java.util.ArrayList;
 
-/**
- * Created by Kuba10 on 17.08.2017.
- */
+
 
 public interface FragmentListener {
 

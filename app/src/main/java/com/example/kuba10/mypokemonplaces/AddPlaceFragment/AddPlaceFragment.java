@@ -61,7 +61,6 @@ public class AddPlaceFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         fragmentListener = (FragmentListener) context;
         pokemonGo_data_list = fragmentListener.getPokemonList();
     }
@@ -71,8 +70,6 @@ public class AddPlaceFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_place, container, false);
 
         ButterKnife.bind(this, view);
-
-
 
         addButt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +125,6 @@ public class AddPlaceFragment extends Fragment {
     private void setPlaceId(PokePlace place) {
         Date date = new Date();
         Long id = date.getTime();
-
         place.setGlobalID(id);
     }
 
@@ -141,8 +137,6 @@ public class AddPlaceFragment extends Fragment {
     private void setPokemonImage() {
         Picasso.with(getContext())
                 .load(selectedPokemon.getImg())
-                .resize(100,100)
-                .centerCrop()
                 .into(pokemonImageView);
     }
 
@@ -167,12 +161,7 @@ public class AddPlaceFragment extends Fragment {
         setPokemonImage();
         titleField.setText(pokemon.getName());
         descriptionField.setText(getResources().getString(R.string.AverageSpawnText) + pokemon.getAvgSpawns().toString());
-
-
-
-
     }
-
 
     @Override
     public void onDetach() {

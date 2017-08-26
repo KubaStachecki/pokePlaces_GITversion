@@ -1,7 +1,6 @@
 package com.example.kuba10.mypokemonplaces.RESTutils;
 
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
-import com.example.kuba10.mypokemonplaces.Model.Pokemon;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 
 import java.util.List;

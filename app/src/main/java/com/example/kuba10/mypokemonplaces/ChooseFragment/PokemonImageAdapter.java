@@ -1,9 +1,7 @@
 package com.example.kuba10.mypokemonplaces.ChooseFragment;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Point;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -13,10 +11,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.example.kuba10.mypokemonplaces.FragmentListener;
-import com.example.kuba10.mypokemonplaces.Model.Pokemon;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.squareup.picasso.Callback;
