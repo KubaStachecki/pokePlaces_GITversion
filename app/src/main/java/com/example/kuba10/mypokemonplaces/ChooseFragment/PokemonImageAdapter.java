@@ -16,6 +16,7 @@ import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 
@@ -74,8 +75,8 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
 
             Picasso.with(context)
                     .load(pokemonGo_data_list.get(position).getImg())
-                    .resize((getScreenWidth() / 4) - 20, (getScreenWidth() / 4) - 20)
-                    .centerCrop()
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                    .fit()
 
                     .into(holder.imageView, new Callback() {
                         @Override

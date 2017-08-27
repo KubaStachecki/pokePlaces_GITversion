@@ -40,7 +40,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     RecyclerView recyclerView;
 
 
-
     public static FirebaseListFragment newInstance() {
         return new FirebaseListFragment();
     }
@@ -76,9 +75,9 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
                 R.layout.place_card_layout, CardViewHolder.class,
                 orderByChild, this, this);
 
-
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mFirebaseAdapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mFirebaseAdapter);
@@ -104,7 +103,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         super.onPause();
         mFirebaseAdapter.cleanup();
 
-
     }
 
     public void dismiss() {
@@ -122,6 +120,7 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -130,6 +129,9 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         mItemTouchHelper = null;
         mFirebaseAdapter = null;
 
+    }
+
+    public void refreshList(int size) {
     }
 
     public void openDetails(Fragment fragment) {
@@ -145,5 +147,5 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     }
 
 
-
 }
+
