@@ -27,4 +27,5 @@
 
 
     </string>
+    <string name="placeMustHaveTitle">Place must have a title</string>
 </resources>

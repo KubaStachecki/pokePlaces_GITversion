@@ -78,7 +78,7 @@ public class AddPlaceFragment extends Fragment {
                 PokePlace place = new PokePlace();
 
                 if (titleField.getText().toString().equals("")) {
-                    fragmentListener.showSnackbar("Place must have a title");
+                    fragmentListener.showSnackbar(getString(R.string.placeMustHaveTitle));
                 } else {
 
                     place.setTitle(titleField.getText().toString());
