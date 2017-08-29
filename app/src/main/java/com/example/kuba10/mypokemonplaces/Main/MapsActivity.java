@@ -55,9 +55,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-    //Travis test
+    //Travis test test sesestestt
 
     private GoogleMap mMap;
+    int travisTest;
     private FusedLocationProviderClient mFusedLocationClient;
     private double latitude;
     private double longitude;
