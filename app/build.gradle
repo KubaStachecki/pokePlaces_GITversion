@@ -16,6 +16,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled true
+
+        }
     }
 }
 
@@ -47,6 +51,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-places:11.0.4'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    apply plugin: 'jacoco-android'
     apply plugin: 'com.google.gms.google-services'
 
 }
