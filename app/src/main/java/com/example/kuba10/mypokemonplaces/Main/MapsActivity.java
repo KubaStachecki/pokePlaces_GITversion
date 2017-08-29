@@ -54,7 +54,8 @@ import static com.example.kuba10.mypokemonplaces.R.id.map;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, FragmentListener {
 
 
-    //Hello Droids!
+
+    //Travis test
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
