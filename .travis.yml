@@ -15,9 +15,9 @@ cache:
 
 env:
  global:
- - ANDROID_API=26
- - EMULATOR_API=26
- - ANDROID_BUILD_TOOLS=26.0.1
+ - ANDROID_API=22
+ - EMULATOR_API=22
+ - ANDROID_BUILD_TOOLS=25.0.1
  - ADB_INSTALL_TIMEOUT=5 # minutes
 
 android:
@@ -32,6 +32,7 @@ android:
  - addon-google_apis-google-19 # google play services
  - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
  - sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
+ - sys-img-armeabi-v7a-android-22
 
  licenses:
  - android-sdk-preview-license-.+
@@ -46,7 +47,8 @@ before_install:
 
 script:
   - ./gradlew build jacocoTestReport assembleAndroidTest
-  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - echo no | android list target
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
