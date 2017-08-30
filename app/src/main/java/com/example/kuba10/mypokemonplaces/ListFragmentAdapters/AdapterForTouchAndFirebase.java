@@ -21,10 +21,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- * Created by Kuba10 on 20.08.2017.
- */
-
 public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlace, CardViewHolder> implements ItemTouchHelperAdapter {
 
     private final Query ref;
@@ -93,7 +89,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
 
     @Override
-    protected void populateViewHolder(final CardViewHolder viewHolder, final PokePlace place, final int position) {
+    protected void populateViewHolder(final CardViewHolder viewHolder, final PokePlace place, int position) {
 
         viewHolder.bindPokePlace(place);
 
@@ -102,9 +98,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch (motionEvent.getAction()) {
-
                     case MotionEvent.ACTION_DOWN: {
-
                         mOnStartDragListener.onStartDrag(viewHolder);
                         return false;
                     }
@@ -135,7 +129,6 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     private void setCardImage(CardViewHolder viewHolder, PokePlace place) {
         if (pokemonGo_data_list.size() > 0) {
-
             if (place.getPokemonId() == -777) {
                 viewHolder.image.setImageResource(R.drawable.ic_034_pikachu_1);
             } else {

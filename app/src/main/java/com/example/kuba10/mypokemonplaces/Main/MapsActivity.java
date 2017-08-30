@@ -357,14 +357,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private boolean checkPermissions() {
-
-        if (ActivityCompat.checkSelfPermission(this,
+        return !(ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        }
-        return true;
+                != PackageManager.PERMISSION_GRANTED);
     }
 
     private void requestPermission() {

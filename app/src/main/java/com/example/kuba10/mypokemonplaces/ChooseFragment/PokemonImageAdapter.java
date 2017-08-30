@@ -57,7 +57,7 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
     }
 
     @Override
-    public void onBindViewHolder(PokemonImageAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final PokemonImageAdapter.ViewHolder holder, int position) {
 
 
         ViewGroup.LayoutParams params = holder.imageContainer.getLayoutParams();
@@ -90,16 +90,11 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
                         }
                     });
 
-
-
-
-
-
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                fragmentListener.sendDataToAddFragment(pokemonGo_data_list.get(position));
+                fragmentListener.sendDataToAddFragment(pokemonGo_data_list.get(holder.getAdapterPosition()));
                 fragment.dismiss();
 
             }

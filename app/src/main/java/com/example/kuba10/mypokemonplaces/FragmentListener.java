@@ -1,6 +1,5 @@
 package com.example.kuba10.mypokemonplaces;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
