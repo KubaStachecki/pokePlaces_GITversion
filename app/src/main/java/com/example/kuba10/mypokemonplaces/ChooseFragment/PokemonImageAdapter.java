@@ -37,7 +37,7 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
 
     public PokemonImageAdapter(Context context, FragmentListener fragmentListener, ChooseFragment fragment) {
         this.context = context;
-        this.fragment = (ChooseFragment) fragment;
+        this.fragment = fragment;
         this.fragmentListener = fragmentListener;
         pokemonGo_data_list = fragmentListener.getPokemonList();
 
@@ -143,9 +143,9 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
             super(itemView);
 
 //            name = (TextView) itemView.findViewById(R.id.choose_fragment_name);
-            imageView = (ImageView) itemView.findViewById(R.id.choose_fragment_image);
-            loader = (ProgressBar) itemView.findViewById(R.id.loader);
-            imageContainer = (RelativeLayout) itemView.findViewById(R.id.image_container);
+            imageView = itemView.findViewById(R.id.choose_fragment_image);
+            loader = itemView.findViewById(R.id.loader);
+            imageContainer = itemView.findViewById(R.id.image_container);
         }
     }
 

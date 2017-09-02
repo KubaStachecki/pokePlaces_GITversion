@@ -6,8 +6,10 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class PokemonGo implements Parcelable {
+
+public class PokemonGo implements Serializable {
 
 
     @SerializedName("id")
@@ -48,28 +50,6 @@ public class PokemonGo implements Parcelable {
     private String spawnTime;
 
 
-    protected PokemonGo(Parcel in) {
-        num = in.readString();
-        name = in.readString();
-        img = in.readString();
-        height = in.readString();
-        weight = in.readString();
-        candy = in.readString();
-        egg = in.readString();
-        spawnTime = in.readString();
-    }
-
-    public static final Creator<PokemonGo> CREATOR = new Creator<PokemonGo>() {
-        @Override
-        public PokemonGo createFromParcel(Parcel in) {
-            return new PokemonGo(in);
-        }
-
-        @Override
-        public PokemonGo[] newArray(int size) {
-            return new PokemonGo[size];
-        }
-    };
 
     public Integer getId() {
         return id;
@@ -170,20 +150,5 @@ public class PokemonGo implements Parcelable {
     }
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(num);
-        parcel.writeString(name);
-        parcel.writeString(img);
-        parcel.writeString(height);
-        parcel.writeString(weight);
-        parcel.writeString(candy);
-        parcel.writeString(egg);
-        parcel.writeString(spawnTime);
-    }
 }

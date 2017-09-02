@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -117,13 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (checkPermissions()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+
                 return;
             }
             mMap.setMyLocationEnabled(true);
@@ -231,7 +226,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         placesDatabaseReference = fDatabase.getReference().child(Constants.PLACES);
     }
 
-    public void placeMarkers() {
+    private void placeMarkers() {
 
         mMap.clear();
 
@@ -247,7 +242,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void getLocation() {
+    private void getLocation() {
 
         if (checkPermissions()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -297,7 +292,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .show();
     }
 
-    public void getPlacesList() {
+    private void getPlacesList() {
 
         placesDatabaseReference.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
 
@@ -416,6 +411,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 showSnackbar(getString(R.string.mapStyleError));
             }
         } catch (Resources.NotFoundException e) {
+            Log.e("ERROR", e.toString());
+
         }
 
     }
@@ -437,8 +434,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public ArrayList<PokemonGo> getPokemonList() {
         if (pokemonGo_data_list == null) {
             restDownload.downloadPokemonList();
-            ArrayList<PokemonGo> cleanList = new ArrayList<PokemonGo>();
-            return cleanList;
+            return   new ArrayList<>();
+
         }
         return restDownload.getPokemonList();
     }

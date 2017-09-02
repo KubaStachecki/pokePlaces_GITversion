@@ -83,7 +83,6 @@
         android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_btn_outline"
-        android:drawableTint="@android:color/white"
         android:foregroundTint="@android:color/white"
         android:text="Cancel"
         android:textColor="@color/addFragmentText" />

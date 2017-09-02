@@ -64,10 +64,6 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     private void setUpFirebaseAdapter() {
 

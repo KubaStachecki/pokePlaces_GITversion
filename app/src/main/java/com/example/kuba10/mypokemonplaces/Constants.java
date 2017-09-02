@@ -1,8 +1,5 @@
 package com.example.kuba10.mypokemonplaces;
 
-/**
- * Created by Kuba10 on 21.08.2017.
- */
 
 public final class Constants {
 

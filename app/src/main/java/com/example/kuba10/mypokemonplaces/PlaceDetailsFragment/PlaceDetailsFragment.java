@@ -27,8 +27,8 @@ public class PlaceDetailsFragment extends DialogFragment {
 
 
     private TextView title, description;
-    public ImageView image, showLocation;
-    public ImageButton favouriteBtn;
+    private ImageView image, showLocation;
+    private ImageButton favouriteBtn;
 
     private PokePlace userSelectedPlace;
     private ArrayList<PokemonGo> pokemonGo_data_list;
@@ -71,11 +71,11 @@ public class PlaceDetailsFragment extends DialogFragment {
 
         pokemonGo_data_list = parentFragment.sendPokemonListToAdapter();
 
-        title = (TextView) view.findViewById(R.id.details_title);
-        description = (TextView) view.findViewById(R.id.details_description);
-        image = (ImageView) view.findViewById(R.id.details_image);
-        showLocation = (ImageView) view.findViewById(R.id.details_show_on_map_button);
-        favouriteBtn = (ImageButton) view.findViewById(R.id.details_favourite_button);
+        title = view.findViewById(R.id.details_title);
+        description = view.findViewById(R.id.details_description);
+        image = view.findViewById(R.id.details_image);
+        showLocation = view.findViewById(R.id.details_show_on_map_button);
+        favouriteBtn = view.findViewById(R.id.details_favourite_button);
 
         image.setImageResource(R.drawable.ic_034_pikachu_1);
         showLocation.setImageResource(R.drawable.ic_021_pointer);

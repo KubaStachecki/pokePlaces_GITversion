@@ -171,7 +171,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
         }
     }
 
-    public void showDetails(PokePlace place) {
+    private void showDetails(PokePlace place) {
         PlaceDetailsFragment details = PlaceDetailsFragment.newInstance(place);
         details.show(parentFragment.getFragmentManager(), "");
     }

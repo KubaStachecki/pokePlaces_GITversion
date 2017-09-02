@@ -21,7 +21,6 @@
 
         android:alpha="0.8"
         android:src="@drawable/ic_gps_fixed_black_24dp"
-        android:tooltipText="Current Position"
         app:backgroundTint="@color/common_google_signin_btn_text_dark_default"
         app:fabSize="normal" />
 
@@ -34,7 +33,6 @@
 
         android:alpha="0.5"
         android:src="@drawable/ic_info_outline_black_24dp"
-        android:tooltipText="Current Position"
         app:backgroundTint="@color/common_google_signin_btn_text_dark_default"
         app:fabSize="mini" />
 
@@ -47,7 +45,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:alpha="0.8"
         android:src="@drawable/ic_list_black_24dp"
-        android:tooltipText="Poke Places List"
         app:backgroundTint="@color/common_google_signin_btn_text_dark_default"
         app:fabSize="normal"
         app:rippleColor="@color/lightBlue" />

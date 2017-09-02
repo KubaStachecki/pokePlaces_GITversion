@@ -94,7 +94,7 @@ public class AddPlaceFragment extends Fragment {
                 .into(pokemonImageView);
     }
 
-    public void closeFragment() {
+    private void closeFragment() {
         fragmentListener.closeFragment(this);
     }
 
@@ -103,7 +103,7 @@ public class AddPlaceFragment extends Fragment {
         this.selectedPokemon = pokemon;
         setPokemonImage();
         titleField.setText(pokemon.getName());
-        descriptionField.setText(String.format("%s%a",getResources().getString(R.string.AverageSpawnText),  pokemon.getAvgSpawns().toString()));
+        descriptionField.setText(String.format("%s%s",getResources().getString(R.string.AverageSpawnText),  pokemon.getAvgSpawns().toString()));
     }
 
     @Override
