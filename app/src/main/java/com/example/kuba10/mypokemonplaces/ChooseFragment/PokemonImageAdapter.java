@@ -95,7 +95,7 @@ public class PokemonImageAdapter extends RecyclerView.Adapter<PokemonImageAdapte
             public void onClick(View view) {
 
                 fragmentListener.sendDataToAddFragment(pokemonGo_data_list.get(holder.getAdapterPosition()));
-                fragment.dismiss();
+                fragment.closeFragment();
 
             }
         });

@@ -39,7 +39,7 @@ public class PlaceDetailsFragment extends DialogFragment {
 
         PlaceDetailsFragment fragment = new PlaceDetailsFragment();
         Bundle args = new Bundle();
-        args.putParcelable(Constants.DETAIL_POKEMON, place);
+        args.putSerializable(Constants.DETAIL_POKEMON, place);
         fragment.setArguments(args);
 
         return fragment;
@@ -56,7 +56,7 @@ public class PlaceDetailsFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 
-            userSelectedPlace = getArguments().getParcelable(Constants.DETAIL_POKEMON);
+            userSelectedPlace = (PokePlace) getArguments().getSerializable(Constants.DETAIL_POKEMON);
             parentFragment = (FirebaseListFragment) getFragmentManager().findFragmentByTag(Constants.LIST_FRAGMENT_TAG);
             query = parentFragment.getQuery();
         }
@@ -141,7 +141,7 @@ public class PlaceDetailsFragment extends DialogFragment {
     private void setPokemonImage() {
         if (pokemonGo_data_list.size() > 0) {
 
-            if (userSelectedPlace.getPokemonId() == -777) {
+            if (userSelectedPlace.getPokemonId() == -Constants.EMPTY_POKEMON_ID) {
 
                 image.setImageResource(R.drawable.ic_034_pikachu_1);
 

@@ -1,13 +1,11 @@
 package com.example.kuba10.mypokemonplaces.AddPlaceFragment;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,13 +23,15 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-
+import butterknife.OnClick;
 
 public class AddPlaceFragment extends Fragment {
 
     private FragmentListener fragmentListener;
-    private ArrayList<PokemonGo> pokemonGo_data_list;
+    private LatLng position;
+    private ArrayList<PokemonGo> pokemonGoDataList;
+    public static final String POSITION = "position";
+    public static final String INDEX_NOT_SET = "list_index_not_set";
     private PokemonGo selectedPokemon;
 
     @BindView(R.id.pokemon_image_view)
@@ -40,95 +40,52 @@ public class AddPlaceFragment extends Fragment {
     TextView descriptionField;
     @BindView(R.id.title_input)
     TextView titleField;
-    @BindView(R.id.add_button)
-    Button addButt;
-    @BindView(R.id.cancel_button)
-    Button cancelButt;
+
 
     public static AddPlaceFragment newInstance(LatLng position) {
         AddPlaceFragment fragment = new AddPlaceFragment();
         Bundle args = new Bundle();
-        args.putParcelable(Constants.POSITION, position);
+        args.putParcelable(POSITION, position);
         fragment.setArguments(args);
         return fragment;
     }
 
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        fragmentListener = (FragmentListener) context;
-        pokemonGo_data_list = fragmentListener.getPokemonList();
+    public void onStart() {
+        super.onStart();
+        if (getContext() instanceof FragmentListener) {
+            fragmentListener = (FragmentListener) getContext();
+        }
+        fillPokemonList();
+        extractSelectedPosition();
+
     }
+
+    private void fillPokemonList() {
+        pokemonGoDataList = fragmentListener.getPokemonList();
+    }
+
+    private void extractSelectedPosition() {
+        position = getArguments().getParcelable(POSITION);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_place, container, false);
-
         ButterKnife.bind(this, view);
-
-        addButt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                LatLng position = getArguments().getParcelable(Constants.POSITION);
-                double lat = position.latitude;
-                double lng = position.longitude;
-
-                PokePlace place = new PokePlace();
-
-                if (titleField.getText().toString().equals("")) {
-                    fragmentListener.showSnackbar(getString(R.string.placeMustHaveTitle));
-                } else {
-
-                    place.setTitle(titleField.getText().toString());
-                    place.setTitle(titleField.getText().toString());
-                    place.setDesctription(descriptionField.getText().toString());
-                    place.setLong(lng);
-                    place.setLat(lat);
-                    place.setListPosition(Constants.INDEX_NOT_SET);
-                    place.setFavourite(0);
-
-                    setSelectedPokemonId(place);
-                    setPlaceId(place);
-
-                    fragmentListener.savePlace(place);
-
-                    dismiss();
-
-                }
-
-
-            }
-        });
-        cancelButt.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
-        pokemonImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fragmentListener.openFragment(ChooseFragment.newInstance(pokemonGo_data_list));
-
-            }
-        });
         return view;
     }
 
-    private void setPlaceId(PokePlace place) {
-        Date date = new Date();
-        Long id = date.getTime();
-        place.setGlobalID(id);
+
+
+    private int setSelectedPokemonId( ) {
+        return (selectedPokemon == null? Constants.EMPTY_POKEMON_ID : decreaseListPositionForId());
     }
 
-    private void setSelectedPokemonId(PokePlace place) {
-        if(selectedPokemon == null) {
-            place.setPokemonId(-777);
-        }else{place.setPokemonId(selectedPokemon.getId() -1);
-        }
+    private int decreaseListPositionForId() {
+        return selectedPokemon.getId() - 1;
     }
 
     private void setPokemonImage() {
@@ -137,33 +94,60 @@ public class AddPlaceFragment extends Fragment {
                 .into(pokemonImageView);
     }
 
-    public void dismiss() {
-        fragmentListener.dismiss(this);
+    public void closeFragment() {
+        fragmentListener.closeFragment(this);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    public void setPokemonId(PokemonGo pokemon){
-
+    public void setCurrentPokemonData(PokemonGo pokemon) {
         this.selectedPokemon = pokemon;
         setPokemonImage();
         titleField.setText(pokemon.getName());
-        descriptionField.setText(getResources().getString(R.string.AverageSpawnText) + pokemon.getAvgSpawns().toString());
+        descriptionField.setText(String.format("%s%a",getResources().getString(R.string.AverageSpawnText),  pokemon.getAvgSpawns().toString()));
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         fragmentListener = null;
+    }
+
+    @OnClick(R.id.add_button)
+    public void addButtonClick(View view) {
+
+        if (titleField.getText().toString().isEmpty()) {
+            fragmentListener.showSnackbar(getString(R.string.placeMustHaveTitle));
+        } else {
+            fragmentListener.savePlace(inflateCurrentPlace());
+            closeFragment();
+        }
+    }
+
+    @OnClick(R.id.cancel_button)
+    public void cancelButtonClick(View view) {
+        closeFragment();
+    }
+
+    @OnClick(R.id.pokemon_image_view)
+    public void iconSelectionClick(View view) {
+        fragmentListener.openFragment(ChooseFragment.newInstance(pokemonGoDataList));
+    }
+
+    private PokePlace inflateCurrentPlace(){
+
+        Date date = new Date();
+        Long id = date.getTime();
+
+        return new PokePlace.PlaceBuilder()
+                .setTitle(titleField.getText().toString())
+                .setDesctription(descriptionField.getText().toString())
+                .setLat(position.latitude)
+                .setLong(position.longitude)
+                .setListPosition(INDEX_NOT_SET)
+                .setGlobalID(id)
+                .setPokemonId(setSelectedPokemonId())
+                .setFavourite(0)
+                .build();
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.kuba10.mypokemonplaces.ChooseFragment;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,77 +10,68 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.example.kuba10.mypokemonplaces.Constants;
 import com.example.kuba10.mypokemonplaces.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+
 
 public class ChooseFragment extends Fragment {
 
 
+    public static final String LIST = "list";
     private PokemonImageAdapter pokeAdapter;
     private GridLayoutManager gridManager;
-    private RecyclerView recyclerView;
-    private LinearLayout errorImage;
     private FragmentListener fragmentListener;
-    private ArrayList<PokemonGo> pokemonGo_data_list;
+    private ArrayList<PokemonGo> pokemonGoDataList;
 
+    @BindView(R.id.error_image_gallery)
+    LinearLayout errorImage;
+
+    @BindView(R.id.choose_recycler_view)
+    RecyclerView recyclerView;
 
     public static ChooseFragment newInstance(ArrayList<PokemonGo> pokemonGo_data_list) {
         ChooseFragment fragment = new ChooseFragment();
-
         Bundle args = new Bundle();
-        args.putParcelableArrayList(Constants.LIST, pokemonGo_data_list);
+        args.putSerializable(LIST, pokemonGo_data_list);
         fragment.setArguments(args);
         return fragment;
-
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        fragmentListener = (FragmentListener) context;
-        pokemonGo_data_list = getArguments().getParcelableArrayList(Constants.LIST);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        if (pokemonGo_data_list.size() == 0) {
+        if (pokemonGoDataList.isEmpty()) {
             errorImage.setVisibility(View.VISIBLE);
-
-
         }
+        if (getContext() instanceof FragmentListener){fragmentListener = (FragmentListener) getContext();}
+        pokemonGoDataList = (ArrayList<PokemonGo>) getArguments().getSerializable(LIST);
+
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_choose, container, false);
-        errorImage = (LinearLayout) view.findViewById(R.id.error_image_gallery);
 
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.choose_recycler_view);
-        gridManager = new GridLayoutManager(getActivity(), 4);
-        recyclerView.setLayoutManager(gridManager);
-
-
-        pokeAdapter = new PokemonImageAdapter(getActivity(), fragmentListener, this);
-        recyclerView.setAdapter(pokeAdapter);
-
-        pokeAdapter.notifyDataSetChanged();
+        makeRecycleViewAdapter();
         errorImage.setVisibility(View.GONE);
 
         return view;
 
+    }
+
+    private void makeRecycleViewAdapter() {
+        gridManager = new GridLayoutManager(getActivity(), 4);
+        recyclerView.setLayoutManager(gridManager);
+        pokeAdapter = new PokemonImageAdapter(getActivity(), fragmentListener, this);
+        recyclerView.setAdapter(pokeAdapter);
+        pokeAdapter.notifyDataSetChanged();
     }
 
 
@@ -91,8 +81,8 @@ public class ChooseFragment extends Fragment {
         fragmentListener = null;
     }
 
-    public void dismiss() {
-        fragmentListener.dismiss(this);
+    public void closeFragment() {
+        fragmentListener.closeFragment(this);
     }
 
 }

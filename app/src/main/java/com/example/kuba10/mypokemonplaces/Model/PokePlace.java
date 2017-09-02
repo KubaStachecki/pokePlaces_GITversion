@@ -7,7 +7,9 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PokePlace implements Parcelable {
+import java.io.Serializable;
+
+public class PokePlace implements Serializable {
 
     @SerializedName("desctription")
     @Expose
@@ -44,39 +46,19 @@ public class PokePlace implements Parcelable {
         this.globalID = globalID;
     }
 
-    public PokePlace (){
-
+    public PokePlace() {
     }
 
-    public PokePlace(String desctription, Double lat, Double lng, String listPosition, String test2, String title, int favourite, int pokemonId) {
-        this.desctription = desctription;
-        this.lat = lat;
-        this.lng = lng;
-        this.listPosition = listPosition;
-        this.favourite = favourite;
-        this.pokemonId = pokemonId;
-        this.title = title;
-    }
+//    public PokePlace(String desctription, Double lat, Double lng, String listPosition, String test2, String title, int favourite, int pokemonId) {
+//        this.desctription = desctription;
+//        this.lat = lat;
+//        this.lng = lng;
+//        this.listPosition = listPosition;
+//        this.favourite = favourite;
+//        this.pokemonId = pokemonId;
+//        this.title = title;
+//    }
 
-    protected PokePlace(Parcel in) {
-        desctription = in.readString();
-        listPosition = in.readString();
-        favourite = in.readInt();
-        title = in.readString();
-        pokemonId = in.readInt();
-    }
-
-    public static final Creator<PokePlace> CREATOR = new Creator<PokePlace>() {
-        @Override
-        public PokePlace createFromParcel(Parcel in) {
-            return new PokePlace(in);
-        }
-
-        @Override
-        public PokePlace[] newArray(int size) {
-            return new PokePlace[size];
-        }
-    };
 
     public int getPokemonId() {
         return pokemonId;
@@ -85,7 +67,6 @@ public class PokePlace implements Parcelable {
     public void setPokemonId(int pokemonId) {
         this.pokemonId = pokemonId;
     }
-
 
     public String getDesctription() {
         return desctription;
@@ -135,21 +116,92 @@ public class PokePlace implements Parcelable {
         this.title = title;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+
+
+   public  interface PlaceBuilderInterface {
+        PokePlace build();
+
+        PlaceBuilder setGlobalID(final long globalID);
+
+        PlaceBuilder setPokemonId(final int pokemonId);
+
+        PlaceBuilder setListPosition ( final String listPosition);
+
+        PlaceBuilder setLat(final Double lat);
+
+        PlaceBuilder setLong(final Double lng);
+
+        PlaceBuilder setFavourite( final int favourite);
+
+        PlaceBuilder setTitle(final String title);
+
+        PlaceBuilder setDesctription( final String desctription);
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public static class PlaceBuilder implements PlaceBuilderInterface {
 
-        parcel.writeString(desctription);
-        parcel.writeString(listPosition);
-        parcel.writeInt(favourite);
-        parcel.writeString(title);
-        parcel.writeInt(pokemonId);
+        private PokePlace place;
+
+        public PlaceBuilder() {
+            this.place = new PokePlace();
+        }
+
+        @Override
+        public PokePlace build() {
+            return place;
+        }
+
+        @Override
+        public PlaceBuilder setGlobalID(long globalID) {
+            place.setGlobalID(globalID);
+            return this;
+        }
+
+        @Override
+        public PlaceBuilder setPokemonId(int pokemonId) {
+            place.setPokemonId(pokemonId);
+            return this;
+        }
+
+        @Override
+        public PlaceBuilder setListPosition(String listPosition) {
+            place.setListPosition(listPosition);
+            return this;
+        }
+
+        @Override
+        public PlaceBuilder setLat(Double lat) {
+            place.setLat(lat);
+            return this;
+        }
+
+        @Override
+        public PlaceBuilder setLong(Double lng) {
+            place.setLong(lng);
+            return this;
+        }
+
+        @Override
+        public PlaceBuilder setFavourite(int favourite) {
+            place.setFavourite(favourite);
+            return this;
+        }
+
+        @Override
+        public PlaceBuilder setTitle(String title) {
+            place.setTitle(title);
+            return this;
+        }
+
+        @Override
+        public PlaceBuilder setDesctription(String desctription) {
+            place.setDesctription(desctription);
+            return this;
+        }
+
+
     }
-
-
 }
+
+
 

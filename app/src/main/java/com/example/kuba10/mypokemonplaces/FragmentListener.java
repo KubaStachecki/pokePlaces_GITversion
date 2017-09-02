@@ -21,7 +21,7 @@ public interface FragmentListener {
 
     void openTaggedFragment(Fragment fragment, String tag);
 
-    void dismiss(Fragment fragment);
+    void closeFragment(Fragment fragment);
 
     void sendDataToAddFragment(PokemonGo pokemon);
 

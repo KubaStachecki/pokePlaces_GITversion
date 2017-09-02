@@ -421,7 +421,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void dismiss(Fragment fragment) {
+    public void closeFragment(Fragment fragment) {
         this.getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
@@ -431,7 +431,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void sendDataToAddFragment(PokemonGo pokemon) {
         AddPlaceFragment fragment = (AddPlaceFragment)
                 this.getSupportFragmentManager().findFragmentByTag(Constants.ADD_FRAGMENT_TAG);
-        fragment.setPokemonId(pokemon);
+        fragment.setCurrentPokemonData(pokemon);
     }
 
     public ArrayList<PokemonGo> getPokemonList() {

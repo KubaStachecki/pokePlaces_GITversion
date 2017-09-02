@@ -129,7 +129,7 @@ public class AdapterForTouchAndFirebase extends FirebaseRecyclerAdapter<PokePlac
 
     private void setCardImage(CardViewHolder viewHolder, PokePlace place) {
         if (pokemonGo_data_list.size() > 0) {
-            if (place.getPokemonId() == -777) {
+            if (place.getPokemonId() == Constants.EMPTY_POKEMON_ID) {
                 viewHolder.image.setImageResource(R.drawable.ic_034_pikachu_1);
             } else {
                 setPokemonImage(place, viewHolder.image);
