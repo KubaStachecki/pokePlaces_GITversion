@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 
 import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.AdapterForTouchAndFirebase;
 import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.CardViewHolder;
-import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.OnStartDragListener;
-import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.SimpleItemTouchHelperCallback;
-import com.example.kuba10.mypokemonplaces.Constants;
-import com.example.kuba10.mypokemonplaces.FragmentListener;
+import com.example.kuba10.mypokemonplaces.Utils.OnStartDragListener;
+import com.example.kuba10.mypokemonplaces.Utils.SimpleItemTouchHelperCallback;
+import com.example.kuba10.mypokemonplaces.Utils.Constants;
+import com.example.kuba10.mypokemonplaces.Utils.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
@@ -26,19 +26,13 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
 public class FirebaseListFragment extends Fragment implements OnStartDragListener {
-
-
-    private AdapterForTouchAndFirebase mFirebaseAdapter;
-    private ItemTouchHelper mItemTouchHelper;
+    private AdapterForTouchAndFirebase firebaseAdapter;
+    private ItemTouchHelper itemTouchHelper;
     private FragmentListener fragmentListener;
     private Query orderByChild;
-
-
     @BindView(R.id.listRecycler)
     RecyclerView recyclerView;
-
 
     public static FirebaseListFragment newInstance() {
         return new FirebaseListFragment();
@@ -47,8 +41,11 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentListener = (FragmentListener) getActivity();
-
+        if (getActivity() instanceof FragmentListener) {
+            fragmentListener = (FragmentListener) getActivity();
+        } else {
+            throw new NullPointerException("Fragment Listener must be main activity");
+        }
     }
 
     @Override
@@ -56,32 +53,25 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, view);
-
-
-        prepareQuery();
+        generateQuery();
         setUpFirebaseAdapter();
-
         return view;
     }
 
-
     private void setUpFirebaseAdapter() {
-
-        mFirebaseAdapter = new AdapterForTouchAndFirebase(PokePlace.class,
+        firebaseAdapter = new AdapterForTouchAndFirebase(PokePlace.class,
                 R.layout.place_card_layout, CardViewHolder.class,
                 orderByChild, this, this);
-
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(mFirebaseAdapter);
-
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mFirebaseAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(recyclerView);
+        recyclerView.setAdapter(firebaseAdapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(firebaseAdapter);
+        itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private void prepareQuery() {
+    private void generateQuery() {
         orderByChild = FirebaseDatabase.getInstance()
                 .getReference()
                 .child(Constants.PLACES)
@@ -90,51 +80,27 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        mItemTouchHelper.startDrag(viewHolder);
+        itemTouchHelper.startDrag(viewHolder);
     }
 
     @Override
     public void onPause() {
-
         super.onPause();
-        mFirebaseAdapter.cleanup();
-
+        firebaseAdapter.cleanup();
     }
 
     public void dismiss() {
-
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
                 .remove(this).commit();
     }
 
-    public void findPosition(PokePlace place) {
-
+    public void moveCameraToPlacePosition(PokePlace place) {
         fragmentListener.findPlaceFromList(place);
-
-
     }
 
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        fragmentListener = null;
-        orderByChild = null;
-        mItemTouchHelper = null;
-        mFirebaseAdapter = null;
-
-    }
-
-    public void refreshList(int size) {
-    }
-
-    public void openDetails(Fragment fragment) {
-        fragmentListener.openFragment(fragment);
-    }
-
-    public Query getQuery() {
+    public Query getOrderByChildQuery() {
         return orderByChild;
     }
 
@@ -142,6 +108,13 @@ public class FirebaseListFragment extends Fragment implements OnStartDragListene
         return fragmentListener.getPokemonList();
     }
 
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        fragmentListener = null;
+        orderByChild = null;
+        itemTouchHelper = null;
+        firebaseAdapter = null;
+    }
 }
 

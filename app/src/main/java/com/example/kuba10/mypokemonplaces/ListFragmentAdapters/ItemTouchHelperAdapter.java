@@ -1,6 +1,6 @@
 package com.example.kuba10.mypokemonplaces.ListFragmentAdapters;
 
- interface ItemTouchHelperAdapter {
+public interface ItemTouchHelperAdapter {
 
     void onItemMove(int fromPosition, int toPosition);
 

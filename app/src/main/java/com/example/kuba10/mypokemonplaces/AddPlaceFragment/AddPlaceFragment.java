@@ -2,6 +2,7 @@ package com.example.kuba10.mypokemonplaces.AddPlaceFragment;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kuba10.mypokemonplaces.ChooseFragment.ChooseFragment;
-import com.example.kuba10.mypokemonplaces.Constants;
-import com.example.kuba10.mypokemonplaces.FragmentListener;
+import com.example.kuba10.mypokemonplaces.Utils.Constants;
+import com.example.kuba10.mypokemonplaces.Utils.FragmentListener;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
 import com.example.kuba10.mypokemonplaces.Model.PokemonGo;
 import com.example.kuba10.mypokemonplaces.R;
@@ -52,15 +53,15 @@ public class AddPlaceFragment extends Fragment {
 
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (getContext() instanceof FragmentListener) {
-            fragmentListener = (FragmentListener) getContext();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getActivity() instanceof FragmentListener) {
+            fragmentListener = (FragmentListener) getActivity();
         }
         fillPokemonList();
         extractSelectedPosition();
-
     }
+
 
     private void fillPokemonList() {
         pokemonGoDataList = fragmentListener.getPokemonList();

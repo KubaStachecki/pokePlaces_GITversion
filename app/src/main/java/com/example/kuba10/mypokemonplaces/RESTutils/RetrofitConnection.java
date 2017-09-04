@@ -21,15 +21,16 @@ public class RetrofitConnection {
     private Retrofit retrofit;
     private PokeApiService pokeRetrofit;
     ArrayList<PokemonGo> pokemonList;
+    private final String jsonUrlAdress = "http://www.ownstar.pl/";
 
 
 
-    public void downloadPokemonList() {
+    public void requestPokemonList() {
 
         pokemonList = new ArrayList<>();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://www.ownstar.pl/")
+                .baseUrl(jsonUrlAdress)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
@@ -66,7 +67,6 @@ public class RetrofitConnection {
                             Log.d("Pokemon", "" + pokemon.getImg());
                             Log.d("Pokemon", "" + pokemon.getAvgSpawns());
                         }
-                        Log.d("POKEMON LIST FULL", "I just like to watch that log...");
 
 
                     }

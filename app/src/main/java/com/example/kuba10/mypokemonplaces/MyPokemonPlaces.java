@@ -6,7 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MyPokemonPlaces extends Application {
 
-    private static MyPokemonPlaces mainApplication;
+    private MyPokemonPlaces mainApplication;
 
 
     @Override

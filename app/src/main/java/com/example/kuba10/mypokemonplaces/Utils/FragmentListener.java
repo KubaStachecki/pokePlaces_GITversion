@@ -1,4 +1,4 @@
-package com.example.kuba10.mypokemonplaces;
+package com.example.kuba10.mypokemonplaces.Utils;
 
 import android.support.v4.app.Fragment;
 

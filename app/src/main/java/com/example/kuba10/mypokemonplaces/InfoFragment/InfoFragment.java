@@ -1,6 +1,5 @@
 package com.example.kuba10.mypokemonplaces.InfoFragment;
 
-
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,13 +11,9 @@ import android.view.ViewGroup;
 
 import com.example.kuba10.mypokemonplaces.R;
 
-
 public class InfoFragment extends DialogFragment {
-
     public static InfoFragment newInstance() {
-        InfoFragment fragment = new InfoFragment();
-
-        return fragment;
+        return new InfoFragment();
     }
 
     @Override
@@ -30,7 +25,6 @@ public class InfoFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_info, container, false);
         return view;
     }
@@ -42,5 +36,4 @@ public class InfoFragment extends DialogFragment {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
     }
-
 }

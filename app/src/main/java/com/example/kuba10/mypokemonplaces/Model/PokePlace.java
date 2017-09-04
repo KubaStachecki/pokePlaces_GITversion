@@ -100,8 +100,8 @@ public class PokePlace implements Serializable {
         this.listPosition = listPosition;
     }
 
-    public int getFavourite() {
-        return favourite;
+    public boolean isFavourite() {
+        return (favourite==0 ?  false :  true) ;
     }
 
     public void setFavourite(int favourite) {

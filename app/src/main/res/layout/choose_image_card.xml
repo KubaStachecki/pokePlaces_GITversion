@@ -29,10 +29,8 @@
 
     <ImageView
         android:id="@+id/choose_fragment_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_034_pikachu_1" />
 
 

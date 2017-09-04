@@ -21,8 +21,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.kuba10.mypokemonplaces.AddPlaceFragment.AddPlaceFragment;
-import com.example.kuba10.mypokemonplaces.Constants;
-import com.example.kuba10.mypokemonplaces.FragmentListener;
+import com.example.kuba10.mypokemonplaces.Utils.Constants;
+import com.example.kuba10.mypokemonplaces.Utils.FragmentListener;
 import com.example.kuba10.mypokemonplaces.InfoFragment.InfoFragment;
 import com.example.kuba10.mypokemonplaces.ListFragment.FirebaseListFragment;
 import com.example.kuba10.mypokemonplaces.Model.PokePlace;
@@ -54,11 +54,7 @@ import static com.example.kuba10.mypokemonplaces.R.id.map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, FragmentListener {
 
-
-    //Travis test test sesestestt
-
     private GoogleMap mMap;
-    int travisTest;
     private FusedLocationProviderClient mFusedLocationClient;
     private double latitude;
     private double longitude;
@@ -67,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<PokePlace> placesMarkersList;
     private FirebaseDatabase fDatabase;
     private DatabaseReference placesDatabaseReference;
-    private ArrayList<PokemonGo> pokemonGo_data_list;
+    private ArrayList<PokemonGo> pokemonGoDataList;
     private RetrofitConnection restDownload;
 
 
@@ -141,8 +137,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void prepareRESTpokemonData() {
         restDownload = new RetrofitConnection();
-        restDownload.downloadPokemonList();
-        pokemonGo_data_list = restDownload.getPokemonList();
+        restDownload.requestPokemonList();
+        pokemonGoDataList = restDownload.getPokemonList();
     }
 
     private void setFabListeners() {
@@ -432,9 +428,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public ArrayList<PokemonGo> getPokemonList() {
-        if (pokemonGo_data_list == null) {
-            restDownload.downloadPokemonList();
-            return   new ArrayList<>();
+        if (pokemonGoDataList == null) {
+            restDownload.requestPokemonList();
+            return  new ArrayList<>();
 
         }
         return restDownload.getPokemonList();

@@ -1,9 +1,9 @@
-package com.example.kuba10.mypokemonplaces.ListFragmentAdapters;
+package com.example.kuba10.mypokemonplaces.Utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-
+import com.example.kuba10.mypokemonplaces.ListFragmentAdapters.ItemTouchHelperAdapter;
 
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 

@@ -13,7 +13,6 @@
     <string name="mapStyleError">map style not loaded</string>
 
 
-
     <string name="app_info_text">Welcome to my bootcamp - competition Pokemon Map!\n \n
     It has map with location, that can be saved on list via button or map-click,
     it has real - time database to store saved location online,
